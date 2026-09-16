@@ -4,6 +4,7 @@
 **Тема індивідуального проєкту:** «Розроблення інформаційної системи організації та каталогізації дизайн-референсів»  
 **Студент:** Волошин Андрій (Група КН-31 / КН-32)  
 **Email:** 25062006vas@gmail.com  
+**GitHub репозиторій:** [https://github.com/voloshyyn/web-app_for_design-references](https://github.com/voloshyyn/web-app_for_design-references)  
 
 ---
 
