@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Звіт з лабораторної роботи №2 - Андрій Волошин (КН-31)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --text: #1f2937;
+      --text-muted: #4b5563;
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --badge-bg: #dbeafe;
+      --badge-text: #1e40af;
+    }
+
+    @page {
+      size: A4;
+      margin: 20mm 15mm 20mm 20mm;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 12px 0;
+      line-height: 1.3;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+      background: var(--surface);
+      padding: 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 13.5px;
+    }
+
+    .meta-item strong {
+      color: #111827;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 36px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-top: 24px;
+      margin-bottom: 8px;
+    }
+
+    p, li {
+      font-size: 14.5px;
+      color: #374151;
+    }
+
+    ul, ol {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--surface);
+      font-weight: 600;
+      color: #111827;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafbfc;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .badge-approved {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      background-color: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #be185d;
+    }
+
+    pre {
+      background-color: #1e293b;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 13px;
+      font-family: 'JetBrains Mono', monospace;
+      line-height: 1.5;
+    }
+
+    pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    blockquote {
+      margin: 16px 0;
+      padding: 12px 18px;
+      border-left: 4px solid var(--primary);
+      background-color: #eff6ff;
+      border-radius: 0 8px 8px 0;
+      font-size: 14px;
+    }
+
+    .question-block {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .question-title {
+      font-weight: 600;
+      color: #1e3a8a;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+
+    @media print {
+      .print-btn {
+        display: none;
+      }
+      body {
+        padding: 0;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">Зберегти як PDF (Друк)</button>
+
+  <div class="header">
+    <div class="kpi-title">Національний технічний університет України «КПІ ім. Ігоря Сікорського» | ФІОТ | Кафедра ІПЗ</div>
+    <h1>Звіт з лабораторної роботи №2</h1>
+    <div style="font-size: 16px; color: var(--primary); font-weight: 600;">Тема: Скласти опис передпроектної документації (Software Requirements Specification, SRS)</div>
+    
+    <div class="meta-grid">
+      <div class="meta-item"><strong>Дисципліна:</strong> Проектування інформаційних систем</div>
+      <div class="meta-item"><strong>Студент:</strong> Андрій Волошин</div>
+      <div class="meta-item"><strong>Група:</strong> КН-31</div>
+      <div class="meta-item"><strong>Email:</strong> voloshyn.andrii_kn31@edu.kpi.ua</div>
+      <div class="meta-item"><strong>ШІ-Кодинговий агент:</strong> Antigravity AI (Gemini 3.8 Flash)</div>
+      <div class="meta-item"><strong>Репозиторій:</strong> github.com/voloshyyn/web-app_for_design-references</div>
+      <div class="meta-item"><strong>Статус SPEC-GATE:</strong> <span class="badge badge-approved">APPROVED / PASSED</span></div>
+      <div class="meta-item"><strong>Дата:</strong> 3 жовтня 2026 р.</div>
+    </div>
+  </div>
+
+  <h2>1. Короткий початковий задум системи (System Concept)</h2>
+  <p><strong>Призначення:</strong> Автономний, легковажний та надшвидкий веб-застосунок для систематизації, збереження та миттєвого пошуку візуальних дизайн-референсів, мокапів, палітр та UI-патернів.</p>
+  <p><strong>Цільова аудиторія:</strong> UI/UX дизайнери, веб-дизайнери, продуктові команди, арт-директори.</p>
+  <p><strong>Проблема, яку розв'язує система:</strong> Сучасні каталоги референсів (Pinterest, Dribbble) перевантажені рекламою, багатоступеневими діалогами та мають відчутні мережеві затримки. Застосунок усуває ці проблеми через принцип «нульового тертя» (Zero-Friction UX): додавання матеріалу в 2–3 кліки, миттєва кон'юнктивна фільтрація за мітками (&lt;50 мс) та локальна доступність бази даних.</p>
+
+  <h2>2. Перебіг SKED-діалогу (Structured Knowledge Elicitation Dialogue)</h2>
+  <p>Формування вимог здійснювалося шляхом структурованого діалогу інженера з мовною моделлю за правилами парадигми Specification-Driven Development (SDD):</p>
+  <ul>
+    <li><strong>Ітерація 1 (Межі системи та ШІ):</strong> Модель запропонувала інтегрувати нейромережу Computer Vision (CV) для автотегування зображень. Інженер <strong>відхилив</strong> цю пропозицію для v1.0 через високу складність, затримки збереження та ризик галюцинацій тегів. Межа v1.0 — швидке ручне додавання з автодоповненням, а CV перенесено в Out-of-Scope (Addendum).</li>
+    <li><strong>Ітерація 2 (Структура таксономії):</strong> Модель запропонувала реляційну схему з 5 обов'язковими категоріальними полями. Інженер <strong>відхилив</strong> примусові поля через шкоду для швидкості UX та ухвалив <strong>гібридне рішення</strong>: пласка множина тегів із підтримкою префіксів фасетів <code>namespace:value</code> (наприклад, <code>style:minimalism</code>, <code>color:dark</code>).</li>
+    <li><strong>Ітерація 3 (Онтологія Категорія vs Колекція vs Тег):</strong> Зафіксовано точні взаємозв'язки: Категорія — взаємовиключна (1:1, дефолт <code>General</code>); Колекція — призначені для користувача тематичні дошки (N:M); Теги — вільні строкові мітки.</li>
+    <li><strong>Ітерація 4 (Метризація вимог):</strong> Вимоги сформульовані у вимірних числових показниках: затримка фільтрації &lt;50 мс (REQ-NF-001), 3-кліковий ліміт додавання (REQ-NF-002), 0% втрати даних при видаленні категорій (REQ-NF-003).</li>
+    <li><strong>Ітерація 5 (BDD Given-When-Then):</strong> Створено 6 сценаріїв, що формалізують поведінку для Happy Path, граничних випадків та безпеки (блокування протоколів <code>javascript:</code> та <code>data:</code>).</li>
+  </ul>
+
+  <h2>3. Ключові уточнення (Розв'язання відкритих питань ЛР1)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Відкрите питання з ЛР1</th>
+        <th>Суть невизначеності</th>
+        <th>Затверджене рішення</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1. Глибина тегування</strong></td>
+        <td>Плаский список чи ієрархічні таксономії?</td>
+        <td>Гібридне фасетне тегування: збережено пласку множину рядків <code>Set[str]</code> із синтаксисом <code>namespace:value</code>. Швидкість пошуку $O(1)$ та нульове тертя UX.</td>
+      </tr>
+      <tr>
+        <td><strong>2. Категорія / Колекція / Тег</strong></td>
+        <td>Чи взаємовиключні категорії, як працюють колекції?</td>
+        <td>Категорія — взаємовиключна верхнього рівня 1:1. Колекція — гнучкі призначені для користувача дошки N:M. Теги — множина дескрипторів пошуку.</td>
+      </tr>
+      <tr>
+        <td><strong>3. Автотегування через CV</strong></td>
+        <td>Чи додавати ШІ-аналіз зображень у v1.0?</td>
+        <td><strong>Out-of-Scope для v1.0</strong>. Зафіксовано як кандидата для розширення через Адендум.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Структура створеного документа SRS (IEEE 830)</h2>
+  <ol>
+    <li><strong>Вступ:</strong> Призначення документа, рамки проєкту, визначення й акроніми, нормативні посилання.</li>
+    <li><strong>Загальний опис:</strong> Перспектива продукту, класи користувачів, операційне середовище, обмеження та припущення.</li>
+    <li><strong>Межі системи:</strong> Чітке розмежування In-Scope (9 компонентів) та Out-of-Scope (4 компоненти).</li>
+    <li><strong>Функціональні вимоги:</strong> 8 вимог (REQ-F-001 .. REQ-F-008) із вхідними/вихідними даними та критеріями прийняття.</li>
+    <li><strong>Нефункціональні вимоги:</strong> 5 вимог (REQ-NF-001 .. REQ-NF-005): швидкодія, ергономіка, надійність, безпека, супровідність.</li>
+    <li><strong>Вимоги до інтерфейсів:</strong> UI-макет, публічний Data API, JSON-схема серіалізації.</li>
+    <li><strong>Контрольна точка SPEC-GATE:</strong> Затвердження базової лінії v1.0 та правила адендумів.</li>
+  </ol>
+
+  <h2>5. Приклади вимог та критеріїв прийняття</h2>
+  <blockquote>
+    <strong>REQ-F-005 (Функціональна):</strong> Миттєва кон'юнктивна фільтрація за тегами.<br>
+    <em>Критерій AC-F-005.1:</em> У результати вибірки потрапляють лише референси, які містять <strong>усі</strong> обрані теги (логічне AND). При знятті всіх фільтрів повертається повний перелік каталогу.
+  </blockquote>
+
+  <blockquote>
+    <strong>REQ-NF-001 (Нефункціональна):</strong> Швидкодія та затримка відгуку (Latency).<br>
+    <em>Критерій AC-NF-001.1:</em> Для каталогу обсягом до 1000 референсів операція фільтрації за 3 тегами або повнотекстовий пошук повинні виконуватися менш ніж за <strong>50 мілісекунд</strong>.
+  </blockquote>
+
+  <blockquote>
+    <strong>REQ-NF-003 (Нефункціональна):</strong> Захист цілісності даних при видаленні класифікаторів.<br>
+    <em>Критерій AC-NF-003.1:</em> У разі видалення користувацької категорії асоційовані референси не видаляються, а автоматично переводяться у резервну категорію <code>General</code> (0% data loss).
+  </blockquote>
+
+  <h2>6. Фрагмент BDD-сценаріїв (Given-When-Then)</h2>
+  <pre><code>Feature: Фільтрація каталогу та захист цілісності
+
+  Scenario: Кон'юнктивна фільтрація за двома тегами (AND)
+    Given у каталозі збережено референси з мітками "mobile, fintech, dark" та "web, fintech, light"
+    When користувач обирає фільтр за тегами "mobile" ТА "dark"
+    Then система повертає лише референси, що містять обидва теги
+    And час розрахунку становить менше 50 мілісекунд
+
+  Scenario: Безпечне видалення категорії з відкатом у General
+    Given існує категорія "3D Modeling" із референсом "Sci-Fi Helmet Render"
+    When користувач видаляє категорію "3D Modeling"
+    Then система видаляє категорію "3D Modeling" зі списку
+    And референс "Sci-Fi Helmet Render" залишається в каталозі
+    And його категорія автоматично змінюється на "General"</code></pre>
+
+  <h2>7. Початкова матриця простежуваності (RTM)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID Вимоги</th>
+        <th>Опис вимоги</th>
+        <th>Критерій прийняття</th>
+        <th>BDD-сценарій</th>
+        <th>Тікет</th>
+        <th>Тест</th>
+        <th>Код</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>REQ-F-001</strong></td>
+        <td>Створення референсу</td>
+        <td>AC-F-001.1, AC-F-001.2</td>
+        <td>SCN-01, SCN-02</td>
+        <td>[TASK-01]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Reference</td>
+      </tr>
+      <tr>
+        <td><strong>REQ-F-002</strong></td>
+        <td>Асоціація з категорією</td>
+        <td>AC-F-002.1, AC-F-002.2</td>
+        <td>SCN-01, SCN-05</td>
+        <td>[TASK-02]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Reference.category</td>
+      </tr>
+      <tr>
+        <td><strong>REQ-F-004</strong></td>
+        <td>Теги та фасети</td>
+        <td>AC-F-004.1, AC-F-004.2</td>
+        <td>SCN-01, SCN-04</td>
+        <td>[TASK-04]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Reference.tags</td>
+      </tr>
+      <tr>
+        <td><strong>REQ-F-005</strong></td>
+        <td>Кон'юнктивна фільтрація</td>
+        <td>AC-F-005.1, AC-F-005.2</td>
+        <td>SCN-03, SCN-04</td>
+        <td>[TASK-05]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Catalog.filter_by_tags</td>
+      </tr>
+      <tr>
+        <td><strong>REQ-NF-001</strong></td>
+        <td>Швидкодія (&lt;50 мс)</td>
+        <td>AC-NF-001.1</td>
+        <td>SCN-03</td>
+        <td>[TASK-05]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Catalog</td>
+      </tr>
+      <tr>
+        <td><strong>REQ-NF-003</strong></td>
+        <td>Цілісність даних (Fallback)</td>
+        <td>AC-NF-003.1</td>
+        <td>SCN-05</td>
+        <td>[TASK-02]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Catalog.remove_category</td>
+      </tr>
+      <tr>
+        <td><strong>REQ-NF-004</strong></td>
+        <td>Безпека (URL Sanitization)</td>
+        <td>AC-NF-004.1</td>
+        <td>SCN-02</td>
+        <td>[TASK-01]</td>
+        <td>test_bdd_scenarios.py</td>
+        <td>src/models.py::Reference.validate</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8. Відповіді на контрольні запитання</h2>
+
+  <div class="question-block">
+    <div class="question-title">1. Чому одноразова генерація SRS за коротким промптом не є еквівалентом SKED-діалогу?</div>
+    <p>Одноразова генерація за коротким промптом базується на усереднених статистичних шаблонах нейромережі. Модель неминуче «галюцинує» та домислює вимоги, додаючи зайві модулі (наприклад, складні комерційні білінги, реєстрацію, важкі нейромережі), які суперечать реальним потребам продукту. SKED (Structured Knowledge Elicitation Dialogue) — це керований інженерний процес, де модель ставить уточнювальні запитання, знаходить приховані суперечності та висуває явні припущення, а людина перевіряє їх, відсікає зайве та формує консенсусний простір вимог.</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">2. Яку роль виконує людина в процесі формування консенсусного простору знань під час SKED?</div>
+    <p>Людина виступає експертом предметної області, архітектором і фінальним арбітром. Вона контролює межі системи (Scope), верифікує й відхиляє помилкові гіпотези ШІ, приймає зважені компроміси (trade-offs) між функціональністю і UX та затверджує єдину мову предметної області (Ubiquitous Language). Без контролю людини модель прагне правдоподібності тексту, тоді як людина спрямовує його на розв'язання реальної проблеми.</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">3. Чим функціональна вимога відрізняється від нефункціональної?</div>
+    <p><strong>Функціональна вимога (FR)</strong> визначає, <em>ЩО</em> система повинна робити: її безпосередню спостережувану поведінку, реакцію на команди користувача та операції над даними (наприклад, REQ-F-005: фільтрація за тегами).<br>
+    <strong>Нефункціональна вимога (NFR)</strong> визначає, <em>ЯК</em> якісно система виконує свої завдання: атрибути продуктивності, безпеки, надійності, ергономіки та супровідності (наприклад, REQ-NF-001: час фільтрації &lt;50 мс для 1000 записів).</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">4. Чому стабільний ID вимоги важливий для подальшого SDD-циклу?</div>
+    <p>Стабільний ідентифікатор (наприклад, <code>REQ-F-001</code>) є фундаментом наскрізної простежуваності (Traceability) в SDD. Він пов'язує вимогу з критеріями прийняття (AC), BDD-сценаріями, тасками розробки, назвами тестів (<code>test_req_f_001</code>) та модулями коду. Це уможливлює автоматизований контроль повноти покриття, легкий аналіз впливу змін (Impact Analysis) та захищає контекст від спотворень при передачі ШІ-агенту.</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">5. Чим критерій прийняття відрізняється від загального опису вимоги?</div>
+    <p>Загальний опис вимоги формулює бізнес-потребу або можливість на концептуальному рівні. <strong>Критерій прийняття (Acceptance Criteria, AC)</strong> — це строга, спостережувана та вимірна умова перевірки, за якою однозначно встановлюється факт готовності вимоги (Pass/Fail). Він визначає граничні значення вхідних даних, правила валідації та точну очікувану реакцію системи.</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">6. Яку проблему розв’язує структура Given–When–Then?</div>
+    <p>Вона усуває комунікаційний розрив між природномовною специфікацією та програмним кодом. Структура чітко розмежовує початковий контекст (Given), дію/подію (When) та очікуваний спостережуваний результат (Then). Такі сценарії є водночас зрозумілими для замовника та придатними для прямої автоматизації у вигляді Acceptance-тестів (Executable Specifications).</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">7. Чому після проходження SPEC-GATE зміни до вимог слід оформлювати адендумом?</div>
+    <p>SPEC-GATE фіксує заморожування специфікації як базової лінії (Baseline v1.0), яка є юридичним та технічним контрактом для подальшої розробки. Неконтрольовані правки базового тексту ведуть до некерованого розповзання меж (Scope Creep) та зламу тестів. Адендум (Addendum) — це версіований додаток, що фіксує причину, дельти змін і проходить окремий аудит, зберігаючи простежуваність та цілісність проєкту.</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">8. Яке призначення матриці простежуваності та які зв’язки вона містить після завершення цієї лабораторної роботи?</div>
+    <p><strong>Призначення:</strong> Забезпечення двонаправленого контролю між артефактами вимог, проектування та тестування, що гарантує відсутність прогалин у реалізації та запобігає появі зайвого неспецифікованого коду.<br>
+    <strong>Зв'язки після ЛР2:</strong> Зв'язує <code>ID вимоги</code> $\longleftrightarrow$ <code>Критерії прийняття (AC)</code> $\longleftrightarrow$ <code>BDD-сценарії (SCN)</code>, а також резервує слоти для майбутніх задач (Task ID), тестів (Test ID) та коду (Code Unit).</p>
+  </div>
+
+  <div class="question-block">
+    <div class="question-title">9. Висновки до лабораторної роботи</div>
+    <p>Опановано побудову формалізованої специфікації вимог до ІС у структурованому SKED-діалозі з мовною моделлю. Усунуто небезпечні домисли ШІ, розв'язано всі відкриті питання з ЛР1, чітко делімітовано межі системи (In-Scope vs Out-of-Scope) та сформовано глосарій Ubiquitous Language. Складено повний документ SRS (IEEE 830) у форматах Markdown та LaTeX, набір BDD-сценаріїв та матрицю простежуваності. Проведено незалежний аудит якості й затверджено рішення SPEC-GATE (Status: APPROVED), що зафіксувало надійну базу для подальшого SDD-циклу розробки кодинговим агентом.</p>
+  </div>
+
+  <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); text-align: center;">
+    Звіт підготовлено в межах курсу «Проектування інформаційних систем» | КПІ ім. Ігоря Сікорського, 2026
+  </div>
+
+</body>
+</html>
