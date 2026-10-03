@@ -1,0 +1,199 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[ukrainian]{babel}
+\usepackage{geometry}
+\geometry{left=25mm,right=15mm,top=20mm,bottom=20mm}
+\usepackage{hyperref}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Специфікація вимог до ПЗ (SRS) - web-app_for_design-references},
+    pdfpagemode=FullScreen,
+}
+
+\title{\textbf{Специфікація вимог до програмного забезпечення (SRS)}\\
+\large Система каталогізації та швидкого пошуку дизайн-референсів\\
+\normalsize Версія 1.0 (Базова лінія SPEC-GATE Approved)}
+
+\author{Андрій Волошин (гр. КН-31)\\
+КПІ ім. Ігоря Сікорського\\
+Дисципліна: Проектування інформаційних систем\\
+Кодинговий агент: Antigravity AI Coding Assistant (Gemini 3.8 Flash)}
+\date{3 жовтня 2026 р.}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Вступ (Introduction)}
+
+\subsection{Призначення документа}
+Цей документ містить повний, несуперечливий та формалізований опис вимог до програмного забезпечення \textbf{«Система каталогізації та швидкого пошуку дизайн-референсів»} (\texttt{web-app\_for\_design-references}). Документ розроблено відповідно до рекомендацій стандарту IEEE 830 та навчальної програми дисципліни «Проектування інформаційних систем» у межах методології Specification-Driven Development (SDD). Документ виступає обов'язковим еталоном для декомпозиції задач, розробки тестів за методикою TDD/BDD, імплементації вихідного коду та проведення перевірок на контрольних точках.
+
+\subsection{Межі проєкту (Scope)}
+Програмний продукт є персоналізованим інструментом для дизайнерів цифрових продуктів (UI/UX, веб, мобільні інтерфейси), який вирішує проблему швидкого збереження візуальних матеріалів, їх категоризації, миттєвої фільтрації та пошуку без перевантаження сторінок і без надмірних форм введення даних (нульове тертя, Zero-Friction UX).
+
+\subsection{Визначення, акроніми та скорочення}
+\begin{itemize}[noitemsep]
+    \item \textbf{SRS} --- Software Requirements Specification (Специфікація вимог до програмного забезпечення).
+    \item \textbf{SDD} --- Specification-Driven Development (Розробка, керована специфікацією).
+    \item \textbf{SKED} --- Structured Knowledge Elicitation Dialogue (Структурований діалог виявлення знань).
+    \item \textbf{SPEC-GATE} --- Контрольна точка верифікації та офіційного затвердження специфікації.
+    \item \textbf{BDD} --- Behavior-Driven Development (Розробка, керована поведінкою).
+    \item \textbf{AC} --- Acceptance Criteria (Критерії прийняття вимог).
+    \item \textbf{Референс (Reference)} --- Одиниця даних із зображенням, назвою, джерелом (URL), категорією, набором тегів та нотатками.
+    \item \textbf{Фасетний тег (Facet Tag)} --- Тег формату \texttt{namespace:value} для параметризованої фільтрації.
+\end{itemize}
+
+\subsection{Посилання на пов'язані документи}
+\begin{enumerate}[noitemsep]
+    \item IEEE Std 830-1998: IEEE Recommended Practice for Software Requirements Specifications.
+    \item Регламент контролю версій: \texttt{docs/git-workflow.md}.
+    \item Протокол SKED-діалогу: \texttt{logs/sked-summary.md}.
+    \item Набір поведінкових BDD-сценаріїв: \texttt{spec/bdd-scenarios.md}.
+    \item Початкова матриця простежуваності: \texttt{spec/traceability-matrix.md}.
+\end{enumerate}
+
+\section{Загальний опис системи (Overall Description)}
+
+\subsection{Контекст продукту}
+Система функціонує як легковажний автономний веб-застосунок (Single Page Application) з локальним зберіганням стану. Застосунок не залежить від сторонніх платних хмарних сервісів, надаючи дизайнеру миттєвий робочий простір для організації натхнення безпосередньо у процесі проєктування інтерфейсів.
+
+\subsection{Класи користувачів}
+\begin{itemize}
+    \item \textbf{UI/UX Дизайнер (Основний користувач):} Потребує швидкого збереження референсів (до 2--3 дій), моментальної фільтрації за стилями та категоріями під час пошуку ідей.
+    \item \textbf{Арт-директор / Лід команди:} Використовує систему для перегляду тематичних колекцій та презентації концепцій замовникам.
+\end{itemize}
+
+\subsection{Операційне середовище}
+Клієнтська частина функціонує у сучасних веб-браузерах (Google Chrome, Firefox, Safari, Edge). Серверна/модельна частина базується на середовищі Python 3.10+ або нативному рушії веб-середовища.
+
+\subsection{Загальні обмеження та припущення}
+\begin{itemize}[noitemsep]
+    \item Принцип нульового тертя (Zero-Friction UX): мінімум обов'язкових полів.
+    \item Висока швидкодія: виконання фільтрації локально без мережевих затримок.
+    \item Конвенція версіювання: зміни вимог фіксуються комітами з префіксом \texttt{spec:}.
+    \item Каталог містить до 5000 елементів у межах релізу v1.0, що гарантує миттєву обробку в оперативній пам'яті.
+\end{itemize}
+
+\section{Межі системи (System Scope: In-Scope vs Out-of-Scope)}
+
+\subsection{Функціональність релізу v1.0 (In-Scope)}
+\begin{enumerate}[noitemsep]
+    \item Створення референсу за посиланням (URL), назвою та категорією.
+    \item Прив'язка до єдиної взаємовиключної категорії (Primary Category) з дефолтом \texttt{General}.
+    \item Організація референсів у колекції (N:M).
+    \item Додавання та видалення нормалізованих тегів і фасетів формату \texttt{namespace:value}.
+    \item Миттєва кон'юнктивна фільтрація за декількома тегами (логічне AND).
+    \item Параметризована фільтрація за фасетами (наприклад, \texttt{style:minimalism}).
+    \item Повнотекстовий нечутливий до регістру пошук за назвою, нотатками та тегами.
+    \item Захист цілісності: збереження референсів при видаленні категорії (автоматичне перепризначення в \texttt{General}).
+    \item Експорт та імпорт даних у форматі JSON.
+\end{enumerate}
+
+\subsection{Функціональність поза межами v1.0 (Out-of-Scope)}
+\begin{itemize}[noitemsep]
+    \item \textbf{Computer Vision (ШІ-зір):} Автоматичне нейромережеве розпізнавання палітри та стилю (винесено в майбутній адендум).
+    \item \textbf{Багатокористувацька онлайн-співпраця:} Real-time синхронізація через WebSockets.
+    \item \textbf{Соціальний маркетплейс:} Публічні рейтинги, лайки, продаж дизайн-робіт.
+    \item \textbf{Платіжні шлюзи та платні плани:} Не передбачені у навчальному проєкті.
+\end{itemize}
+
+\section{Функціональні вимоги (Functional Requirements)}
+
+\begin{description}
+    \item[\textbf{REQ-F-001: Створення референсу із зовнішнього джерела}] \hfill \\
+    Система повинна забезпечувати створення нового референсу за вказаними назвою, URL-адресою джерела, необов'язковим прев'ю, категорією, набором тегів та нотатками.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-001.1:} При непорожній назві та валідному URL референс успішно зберігається.
+        \item \textbf{AC-F-001.2:} При порожній назві або некоректному URL виводиться повідомлення про помилку валідації.
+        \item \textbf{AC-F-001.3:} Заборонено збереження адрес із небезпечними протоколами (не \texttt{http://} і не \texttt{https://}).
+    \end{itemize}
+
+    \item[\textbf{REQ-F-002: Асоціація референсу з категорією}] \hfill \\
+    Кожен референс строго асоціюється з однією категорією (відношення 1:1).
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-002.1:} Користувач може призначити одну з існуючих категорій.
+        \item \textbf{AC-F-002.2:} Якщо категорія не вказана, системно встановлюється \texttt{General}.
+    \end{itemize}
+
+    \item[\textbf{REQ-F-003: Групування референсів у колекції (N:M)}] \hfill \\
+    Система повинна підтримувати додавання референсу до кількох користувацьких колекцій.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-003.1:} Референс може входити в довільну кількість колекцій.
+        \item \textbf{AC-F-003.2:} Видалення з колекції не видаляє референс із системи.
+    \end{itemize}
+
+    \item[\textbf{REQ-F-004: Управління тегами та фасетами}] \hfill \\
+    Система дозволяє додавати нормалізовані теги та фасети \texttt{namespace:value}.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-004.1:} Теги нормалізуються до нижнього регістру без зайвих пробілів.
+        \item \textbf{AC-F-004.2:} Теги з двокрапкою розпізнаються як префіксні фасети.
+    \end{itemize}
+
+    \item[\textbf{REQ-F-005: Миттєва кон'юнктивна фільтрація}] \hfill \\
+    Фільтрація списку матеріалів за довільною комбінацією тегів.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-005.1:} Референс відображається у вибірці тільки за умови наявності всіх обраних тегів (AND-семантика).
+    \end{itemize}
+
+    \item[\textbf{REQ-F-006: Повнотекстовий пошук}] \hfill \\
+    Пошук за входженням підрядка в назву, нотатки та теги без урахування регістру.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-006.1:} Збіг у будь-якому з текстових полів повертає референс у результатах.
+    \end{itemize}
+
+    \item[\textbf{REQ-F-007: Перегляд детальної картки}] \hfill \\
+    Відображення повної інформації про вибраний об'єкт.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-007.1:} Картка відображає прев'ю, клікабельне посилання, категорію, теги та нотатки.
+    \end{itemize}
+
+    \item[\textbf{REQ-F-008: Редагування та видалення}] \hfill \\
+    Оновлення даних або повне видалення референсу з каталогу.
+    \begin{itemize}[noitemsep]
+        \item \textbf{AC-F-008.1:} Зміни миттєво зберігаються у сховищі.
+        \item \textbf{AC-F-008.2:} Видалення очищує референс з усіх колекцій без порушення цілісності.
+    \end{itemize}
+\end{description}
+
+\section{Нефункціональні вимоги (Non-Functional Requirements)}
+
+\begin{description}
+    \item[\textbf{REQ-NF-001: Швидкодія (Performance)}] \hfill \\
+    \textbf{AC-NF-001.1:} Для каталогу обсягом до 1000 елементів фільтрація за 3 тегами або повнотекстовий пошук виконуються за час \textbf{$<$ 50 мілісекунд}.
+
+    \item[\textbf{REQ-NF-002: Зручність використання (Usability)}] \hfill \\
+    \textbf{AC-NF-002.1:} Додавання нового референсу із зазначенням URL, категорії та 3 тегів здійснюється не більше ніж за \textbf{3 дії (кліки)}.
+
+    \item[\textbf{REQ-NF-003: Надійність та цілісність (Reliability)}] \hfill \\
+    \textbf{AC-NF-003.1:} Видалення категорії не видаляє асоційовані референси, а переводить їх у категорію \texttt{General}. Втрата референсів заборонена (0\% data loss).
+
+    \item[\textbf{REQ-NF-004: Безпека (Security)}] \hfill \\
+    \textbf{AC-NF-004.1:} Дозволені лише схеми \texttt{http://} та \texttt{https://}. Схеми \texttt{javascript:} та \texttt{data:} блокуються. Текстові поля санітизуються проти XSS.
+
+    \item[\textbf{REQ-NF-005: Супровідність (Maintainability)}] \hfill \\
+    \textbf{AC-NF-005.1:} Чітке відокремлення бізнес-логіки. Покриття модульних тестів (Unit/BDD) становить не менше 95\%.
+\end{description}
+
+\section{Вимоги до інтерфейсів (Interface Requirements)}
+\subsection{Інтерфейс користувача}
+Адаптивна сітка карток референсів (Masonry / Grid layout) із зображеннями-прев'ю, панель швидкого пошуку із живим оновленням результатів та бічна/верхня панель категорій із чіпсами тегів.
+
+\subsection{Програмний інтерфейс (Data Interface)}
+Модуль моделей надає уніфіковані методи: \texttt{add\_reference}, \texttt{filter\_by\_tags}, \texttt{search}, \texttt{remove\_category}. Серіалізація стану здійснюється за стандартизованою схемою JSON.
+
+\section{Контрольна точка SPEC-GATE}
+Ця специфікація пройшла офіційну перевірку інженера на контрольній точці \textbf{SPEC-GATE} (протокол у \texttt{logs/spec-gate.md}) та затверджена зі статусом \textbf{APPROVED}. Вона слугує незмінною базовою лінією (Baseline v1.0). Подальші модифікації допускаються лише через процедуру Адендуму (Addendum).
+
+\end{document}
