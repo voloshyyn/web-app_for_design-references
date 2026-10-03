@@ -1,7 +1,7 @@
 """
-Smoke test to verify domain model initialization.
+Smoke test to verify domain model initialization and basic integrity.
 """
-from src.models import Reference
+from src.models import Reference, Catalog
 
 def test_create_reference():
     ref = Reference(
@@ -12,3 +12,8 @@ def test_create_reference():
     assert ref.title == "Minimalist Landing Page Design"
     assert ref.category == "General"
     assert hasattr(ref, "tags")
+
+def test_catalog_initialization():
+    catalog = Catalog()
+    assert "General" in catalog.categories
+    assert len(catalog.references) == 0
