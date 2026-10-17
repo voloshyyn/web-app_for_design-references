@@ -1,0 +1,203 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 650" width="100%" height="100%" style="background:#0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="gradHeader" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#818cf8"/>
+    </linearGradient>
+    <linearGradient id="gradDraft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="gradBacklog" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="gradProgress" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <linearGradient id="gradVerify" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+    <linearGradient id="gradReview" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="gradDone" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="gradBlocked" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+
+    <!-- Markers -->
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+    </marker>
+    <marker id="arrow-red" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arrow-cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+    </marker>
+
+    <!-- Filters for Glow / Shadows -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Title & Legend Header -->
+  <text x="500" y="38" text-anchor="middle" font-size="22" font-weight="700" fill="url(#gradHeader)">
+    Життєвий цикл задачі в SDD-системі багтрекінгу (з ролями переходів)
+  </text>
+  <text x="500" y="60" text-anchor="middle" font-size="13" fill="#94a3b8">
+    Проєкт: web-app_for_design-references | Дисципліна: Проектування інформаційних систем
+  </text>
+
+  <!-- Legend Box -->
+  <rect x="50" y="75" width="900" height="42" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <circle cx="90" cy="96" r="6" fill="#38bdf8"/>
+  <text x="105" y="100" font-size="12" font-weight="600" fill="#e2e8f0">Роль: Людина / Студент (Lead)</text>
+
+  <circle cx="340" cy="96" r="6" fill="#a855f7"/>
+  <text x="355" y="100" font-size="12" font-weight="600" fill="#e2e8f0">Роль: ШІ-кодинговий агент</text>
+
+  <circle cx="580" cy="96" r="6" fill="#10b981"/>
+  <text x="595" y="100" font-size="12" font-weight="600" fill="#e2e8f0">Роль: CI / Автоматичні тести</text>
+
+  <circle cx="800" cy="96" r="6" fill="#ef4444"/>
+  <text x="815" y="100" font-size="12" font-weight="600" fill="#e2e8f0">Рішення Gate / Відхилення</text>
+
+  <!-- ================= MAIN STATES (NODES) ================= -->
+
+  <!-- Node 1: NEW / DRAFT -->
+  <g id="node-draft" transform="translate(60, 200)" filter="url(#shadow)">
+    <rect width="130" height="60" rx="10" fill="url(#gradDraft)" stroke="#475569" stroke-width="2"/>
+    <text x="65" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#f8fafc">1. NEW / DRAFT</text>
+    <text x="65" y="46" text-anchor="middle" font-size="10" fill="#94a3b8">Ініціація з SRS ID</text>
+  </g>
+
+  <!-- Node 2: BACKLOG -->
+  <g id="node-backlog" transform="translate(260, 200)" filter="url(#shadow)">
+    <rect width="130" height="60" rx="10" fill="url(#gradBacklog)" stroke="#38bdf8" stroke-width="2"/>
+    <text x="65" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#38bdf8">2. BACKLOG</text>
+    <text x="65" y="46" text-anchor="middle" font-size="10" fill="#94a3b8">Оцінено та схвалено</text>
+  </g>
+
+  <!-- Node 3: IN PROGRESS -->
+  <g id="node-progress" transform="translate(460, 200)" filter="url(#shadow)">
+    <rect width="140" height="60" rx="10" fill="url(#gradProgress)" stroke="#38bdf8" stroke-width="2"/>
+    <text x="70" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">3. IN PROGRESS</text>
+    <text x="70" y="46" text-anchor="middle" font-size="10" fill="#e0f2fe">TDD / Кодування</text>
+  </g>
+
+  <!-- Node 4: VERIFICATION -->
+  <g id="node-verify" transform="translate(670, 200)" filter="url(#shadow)">
+    <rect width="140" height="60" rx="10" fill="url(#gradVerify)" stroke="#818cf8" stroke-width="2"/>
+    <text x="70" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">4. VERIFICATION</text>
+    <text x="70" y="46" text-anchor="middle" font-size="10" fill="#e0e7ff">Pytest &amp; SLA бенчмарк</text>
+  </g>
+
+  <!-- Node 5: VALIDATION / REVIEW -->
+  <g id="node-review" transform="translate(670, 420)" filter="url(#shadow)">
+    <rect width="150" height="60" rx="10" fill="url(#gradReview)" stroke="#f59e0b" stroke-width="2"/>
+    <text x="75" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">5. VALIDATION</text>
+    <text x="75" y="46" text-anchor="middle" font-size="10" fill="#fef3c7">Аудит задуму &amp; Stage-Gate</text>
+  </g>
+
+  <!-- Node 6: DONE -->
+  <g id="node-done" transform="translate(460, 420)" filter="url(#shadow)">
+    <rect width="140" height="60" rx="10" fill="url(#gradDone)" stroke="#34d399" stroke-width="2"/>
+    <text x="70" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">6. DONE / CLOSED</text>
+    <text x="70" y="46" text-anchor="middle" font-size="10" fill="#d1fae5">Вимогу виконано 100%</text>
+  </g>
+
+  <!-- Node 7: BLOCKED / REVISE -->
+  <g id="node-blocked" transform="translate(260, 420)" filter="url(#shadow)">
+    <rect width="140" height="60" rx="10" fill="url(#gradBlocked)" stroke="#f87171" stroke-width="2"/>
+    <text x="70" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">7. REVISE / ADDENDUM</text>
+    <text x="70" y="46" text-anchor="middle" font-size="10" fill="#fee2e2">Прогалина у SRS</text>
+  </g>
+
+  <!-- Node 8: REJECTED -->
+  <g id="node-rejected" transform="translate(60, 420)" filter="url(#shadow)">
+    <rect width="130" height="60" rx="10" fill="#1e1e24" stroke="#64748b" stroke-width="1.5" stroke-dasharray="4,4"/>
+    <text x="65" y="28" text-anchor="middle" font-size="13" font-weight="700" fill="#94a3b8">REJECTED</text>
+    <text x="65" y="46" text-anchor="middle" font-size="10" fill="#64748b">Gold Plating / Поза SRS</text>
+  </g>
+
+  <!-- ================= TRANSITIONS (ARROWS & ROLES) ================= -->
+
+  <!-- Transition 1: Draft -> Backlog -->
+  <path d="M 190 230 L 260 230" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+  <rect x="195" y="195" width="60" height="20" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="225" y="209" text-anchor="middle" font-size="9" font-weight="700" fill="#38bdf8">Людина</text>
+  <text x="225" y="245" text-anchor="middle" font-size="9" fill="#94a3b8">Декомпозиція</text>
+
+  <!-- Transition 2: Backlog -> In Progress -->
+  <path d="M 390 230 L 460 230" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+  <rect x="395" y="195" width="60" height="20" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="425" y="209" text-anchor="middle" font-size="9" font-weight="700" fill="#38bdf8">Людина</text>
+  <text x="425" y="245" text-anchor="middle" font-size="9" fill="#94a3b8">Призначення</text>
+
+  <!-- Transition 3: In Progress -> Verification -->
+  <path d="M 600 230 L 670 230" fill="none" stroke="#a855f7" stroke-width="2" marker-end="url(#arrow-purple)"/>
+  <rect x="605" y="195" width="60" height="20" rx="4" fill="#0f172a" stroke="#a855f7" stroke-width="1"/>
+  <text x="635" y="209" text-anchor="middle" font-size="9" font-weight="700" fill="#a855f7">ШІ-агент</text>
+  <text x="635" y="245" text-anchor="middle" font-size="9" fill="#94a3b8">Код + Тести</text>
+
+  <!-- Transition 4: Verification -> In Progress (FAIL) Loopback -->
+  <path d="M 720 200 C 720 140, 530 140, 530 200" fill="none" stroke="#ef4444" stroke-width="1.8" stroke-dasharray="4,4" marker-end="url(#arrow-red)"/>
+  <rect x="585" y="132" width="90" height="20" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+  <text x="630" y="146" text-anchor="middle" font-size="9" font-weight="700" fill="#ef4444">CI / Авто-раннер</text>
+  <text x="630" y="165" text-anchor="middle" font-size="9" fill="#fca5a5">Помилка тесту (Fix)</text>
+
+  <!-- Transition 5: Verification -> Validation (PASS) -->
+  <path d="M 740 260 L 740 420" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <rect x="690" y="325" width="100" height="22" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+  <text x="740" y="340" text-anchor="middle" font-size="9" font-weight="700" fill="#10b981">CI: 100% Pass</text>
+  <text x="740" y="360" text-anchor="middle" font-size="9" fill="#94a3b8">Передача людині</text>
+
+  <!-- Transition 6: Validation -> Done (GO Decision) -->
+  <path d="M 670 450 L 600 450" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <rect x="605" y="460" width="60" height="20" rx="4" fill="#0f172a" stroke="#10b981" stroke-width="1"/>
+  <text x="635" y="474" text-anchor="middle" font-size="9" font-weight="700" fill="#10b981">Людина</text>
+  <text x="635" y="438" text-anchor="middle" font-size="9" fill="#6ee7b7">Рішення Gate GO</text>
+
+  <!-- Transition 7: Validation -> Blocked / Revise (REVISE Decision) -->
+  <path d="M 745 480 C 745 550, 330 550, 330 480" fill="none" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow-red)"/>
+  <rect x="470" y="525" width="130" height="22" rx="4" fill="#0f172a" stroke="#ef4444" stroke-width="1"/>
+  <text x="535" y="540" text-anchor="middle" font-size="9" font-weight="700" fill="#ef4444">Людина (Рішення REVISE)</text>
+  <text x="535" y="562" text-anchor="middle" font-size="9" fill="#fca5a5">Потрібен Адендум до вимог</text>
+
+  <!-- Transition 8: Blocked -> Backlog (Addendum Approved) -->
+  <path d="M 310 420 L 310 260" fill="none" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow-cyan)"/>
+  <rect x="255" y="325" width="110" height="22" rx="4" fill="#0f172a" stroke="#38bdf8" stroke-width="1"/>
+  <text x="310" y="340" text-anchor="middle" font-size="9" font-weight="700" fill="#38bdf8">Людина (Затвердження)</text>
+  <text x="310" y="360" text-anchor="middle" font-size="9" fill="#94a3b8">Адендум узгоджено</text>
+
+  <!-- Transition 9: Backlog -> Rejected -->
+  <path d="M 280 260 C 260 350, 150 350, 140 420" fill="none" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow)"/>
+  <rect x="150" y="325" width="85" height="20" rx="4" fill="#0f172a" stroke="#64748b" stroke-width="1"/>
+  <text x="192" y="339" text-anchor="middle" font-size="9" font-weight="700" fill="#94a3b8">Людина (Audit)</text>
+
+  <!-- Bottom Explanatory Notes -->
+  <rect x="50" y="585" width="900" height="45" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="70" y="605" font-size="11" fill="#cbd5e1">
+    <tspan font-weight="700" fill="#38bdf8">Ключове правило SDD:</tspan> Тікет типу Feature блокується до завершення тікета Test. Рішення Stage-Gate та валідація бізнес-задуму
+  </text>
+  <text x="70" y="621" font-size="11" fill="#cbd5e1">
+    виконуються виключно людиною і не делегуються агенту, запобігаючи неконтрольованому спотворенню архітектури та кореляції помилок.
+  </text>
+</svg>

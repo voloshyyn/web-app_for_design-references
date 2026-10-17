@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Звіт з лабораторної роботи №3 - Андрій Волошин (КН-31)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+    
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --text: #1f2937;
+      --text-muted: #4b5563;
+      --bg: #ffffff;
+      --surface: #f9fafb;
+      --border: #e5e7eb;
+      --code-bg: #f3f4f6;
+      --badge-bg: #dbeafe;
+      --badge-text: #1e40af;
+    }
+
+    @page {
+      size: A4;
+      margin: 20mm 15mm 20mm 20mm;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background-color: var(--bg);
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    .header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-title {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #111827;
+      margin: 0 0 12px 0;
+      line-height: 1.25;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px 24px;
+      background-color: var(--surface);
+      padding: 16px 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      margin-top: 16px;
+    }
+
+    .meta-item strong {
+      color: #374151;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 36px;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    p, li {
+      font-size: 14.5px;
+      color: #374151;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13.5px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: var(--surface);
+      font-weight: 600;
+      color: #111827;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafbfc;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12.5px;
+      background-color: var(--code-bg);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #b91c1c;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 12px;
+      background-color: var(--badge-bg);
+      color: var(--badge-text);
+    }
+
+    .badge-crit {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-go {
+      background-color: #d1fae5;
+      color: #065f46;
+    }
+
+    .diagram-container {
+      background: #0f172a;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .diagram-container img, .diagram-container svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .callout {
+      border-left: 4px solid var(--primary);
+      background-color: #eff6ff;
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 18px 0;
+      font-size: 14px;
+    }
+
+    .print-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--primary);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 30px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+      transition: background 0.2s;
+    }
+    .print-btn:hover {
+      background: var(--primary-dark);
+    }
+    @media print {
+      .print-btn { display: none; }
+      body { padding: 0; max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="print-btn" onclick="window.print()">Друк у PDF</button>
+
+  <div class="header">
+    <div class="kpi-title">Національний технічний університет України «КПІ ім. Ігоря Сікорського»</div>
+    <div class="kpi-title">Факультет інформатики та обчислювальної техніки • Кафедра ІПЗ</div>
+    <h1>Звіт з лабораторної роботи №3</h1>
+    <div style="font-size: 16px; font-weight: 600; color: #4b5563;">Організація життєвого циклу, планування та управління ризиками SDD-проєкту</div>
+    
+    <div class="meta-grid">
+      <div class="meta-item"><strong>Дисципліна:</strong> Проектування інформаційних систем</div>
+      <div class="meta-item"><strong>Студент:</strong> Андрій Волошин (гр. КН-31 / КН-21)</div>
+      <div class="meta-item"><strong>Кодинговий агент:</strong> Antigravity AI (Gemini 3.8 Flash)</div>
+      <div class="meta-item"><strong>Репозиторій:</strong> <a href="https://github.com/voloshyyn/web-app_for_design-references" target="_blank">voloshyyn/web-app_for_design-references</a></div>
+      <div class="meta-item"><strong>Методологія:</strong> Specification-Driven Development (SDD)</div>
+      <div class="meta-item"><strong>Статус плану:</strong> <span class="badge badge-go">APPROVED (PLAN-GATE: GO)</span></div>
+    </div>
+  </div>
+
+  <h2>1. Мета роботи та вхідні артефакти</h2>
+  <p><strong>Мета:</strong> Опанувати практичну трансформацію затвердженої специфікації вимог (SRS Baseline v1.0) на керований календарний план реалізації у парадигмі <strong>Specification-Driven Development (SDD)</strong>. Набути навичок декомпозиції вимог на SDD-тікети, моделювання життєвого циклу задачі в системі багтрекінгу, оптимізації взаємодії людини та ШІ-агента, розрахунку критичного шляху (CPM) з урахуванням людських обмежень пропускної здатності, а також сформувати реєстр класичних та ШІ-специфічних ризиків проєкту.</p>
+  <p><strong>Вхідні артефакти:</strong> затверджена базова специфікація <code>spec/srs.md</code> (Baseline v1.0), глосарій <code>spec/glossary.md</code>, набір BDD-сценаріїв <code>spec/bdd-scenarios.md</code>, початкова матриця простежуваності <code>spec/traceability-matrix.md</code> та протокол контрольної точки <code>logs/spec-gate.md</code>.</p>
+
+  <h2>2. Налаштування системи багтрекінгу та життєвий цикл задачі</h2>
+  <p>Для трекінгу задач обрано платформу <strong>GitHub Issues &amp; GitHub Projects</strong>. Життєвий цикл задачі регламентовано послідовністю станів:</p>
+  <ul>
+    <li><code>New / Draft</code> — виділення атомарної одиниці робіт на основі стабільного ID вимоги з SRS.</li>
+    <li><code>Backlog / Planned</code> — оцінка трудовитрат, встановлення зв'язків та визначення черги виконання.</li>
+    <li><code>In Progress (Dev / TDD)</code> — активна розробка. Дотримується <strong>правило блокування</strong>: реалізація коду фічі починається лише після наявності відповідного тесту.</li>
+    <li><code>Verification (CI / Testing)</code> — автоматизований прогін <code>pytest</code>, лінтинг PEP 8, бенчмарк SLA (Latency &lt; 50 мс).</li>
+    <li><code>Validation (Review / Gate)</code> — людський когнітивний аудит ергономіки, відповідності задуму та ухвалення рішення Gate.</li>
+    <li><code>Done / Closed</code> — успішне завершення задачі, злиття коду в гілку <code>main</code>, оновлення матриці RTM.</li>
+    <li><code>Blocked / Revise</code> — зупинка робіт у разі виявлення прогалин у SRS (ініціює створення Адендуму).</li>
+    <li><code>Rejected</code> — відхилення неспецифікованих пропозицій кодингового агента (захист від Gold Plating).</li>
+  </ul>
+
+  <h3>Діаграма життєвого циклу задачі із зазначенням ролей на переходах</h3>
+  <div class="diagram-container">
+    <object data="task-lifecycle-diagram.svg" type="image/svg+xml" style="width: 100%; max-height: 550px;"></object>
+  </div>
+  <p style="font-size: 13px; color: var(--text-muted); text-align: center;"><em>Рис. 1. Граф переходів життєвого циклу задачі з явним зазначенням ролей (Людина, ШІ-агент, CI)</em></p>
+
+  <h2>3. Таблиця типів тікетів SDD та розподіл ролей</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Тип тікета</th>
+        <th>Префікс</th>
+        <th>Призначення в SDD</th>
+        <th>Основний виконавець</th>
+        <th>Роль людини (Студента)</th>
+        <th>Рівень автономії ШІ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Specification</strong></td>
+        <td><code>SPEC-*</code></td>
+        <td>Вимоги, межі v1.0, бізнес-правила</td>
+        <td>Людина (Lead)</td>
+        <td>Повне авторство та затвердження</td>
+        <td>Допоміжний асистент</td>
+      </tr>
+      <tr>
+        <td><strong>Addendum</strong></td>
+        <td><code>ADD-*</code></td>
+        <td>Формальні зміни SRS після Gate</td>
+        <td>Людина (Lead)</td>
+        <td>Авторизація будь-яких змін</td>
+        <td>Заборонено створювати</td>
+      </tr>
+      <tr>
+        <td><strong>Test</strong></td>
+        <td><code>TEST-*</code></td>
+        <td>BDD-сценарії та Acceptance-тести</td>
+        <td>ШІ-агент + Людина</td>
+        <td>Рев'ю тест-кейсів до коду</td>
+        <td>Висока (генерація pytest)</td>
+      </tr>
+      <tr>
+        <td><strong>Feature</strong></td>
+        <td><code>FEAT-*</code></td>
+        <td>Код моделей та логіка каталогу</td>
+        <td>ШІ-кодинговий агент</td>
+        <td>Контроль стилю, PR Review</td>
+        <td>Висока (імплементація)</td>
+      </tr>
+      <tr>
+        <td><strong>Verification</strong></td>
+        <td><code>VERIF-*</code></td>
+        <td>Авто-тести, coverage, SLA</td>
+        <td>CI / Авто-раннер</td>
+        <td>Аналіз звітів верифікації</td>
+        <td>Повна (автоматизована)</td>
+      </tr>
+      <tr>
+        <td><strong>Validation</strong></td>
+        <td><code>VALID-*</code></td>
+        <td>Аудит UX, перевірка зручності</td>
+        <td>Людина</td>
+        <td>Оцінювач бізнес-відповідності</td>
+        <td>Консультативна</td>
+      </tr>
+      <tr>
+        <td><strong>Documentation</strong></td>
+        <td><code>DOC-*</code></td>
+        <td>RTM, керівництва користувача</td>
+        <td>ШІ-агент + Людина</td>
+        <td>Редагування та затвердження</td>
+        <td>Середня (чернетки)</td>
+      </tr>
+      <tr>
+        <td><strong>Gate</strong></td>
+        <td><code>GATE-*</code></td>
+        <td>Контрольна точка (GO / REVISE)</td>
+        <td>Людина (Lead)</td>
+        <td><strong>Виключне право прийняття рішень</strong></td>
+        <td><strong>Заборонено ухвалювати</strong></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Декомпозиція вимог та граф залежностей</h2>
+  <p>Усі 13 вимог специфікації (8 функціональних, 5 нефункціональних) декомпозовано на 15 взаємопов'язаних задач. Забезпечено дотримання ключового принципу TDD: кожна задача <code>FEAT-*</code> жорстко заблокована попереднім виконанням задачі <code>TEST-*</code>.</p>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>Ticket ID</th>
+        <th>Тип</th>
+        <th>Вимога SRS</th>
+        <th>Назва задачі</th>
+        <th>Попередники</th>
+        <th>Виконавець</th>
+        <th>ШІ (год)</th>
+        <th>Людина (год)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>SPEC-BASE</code></td>
+        <td>Specification</td>
+        <td>Всі вимоги</td>
+        <td>Аудит базової лінії SRS v1.0 та верифікація меж</td>
+        <td>—</td>
+        <td>Людина</td>
+        <td>0.2</td>
+        <td>1.0</td>
+      </tr>
+      <tr>
+        <td><code>GATE-PLAN</code></td>
+        <td>Gate</td>
+        <td>Всі вимоги</td>
+        <td>Контрольна точка PLAN-GATE (Рішення GO)</td>
+        <td><code>SPEC-BASE</code></td>
+        <td>Людина</td>
+        <td>0.1</td>
+        <td>0.5</td>
+      </tr>
+      <tr>
+        <td><code>TEST-01</code></td>
+        <td>Test</td>
+        <td><code>REQ-F-001, NF-004</code></td>
+        <td>Тести створення референсу та блокування XSS (SCN-01, 02)</td>
+        <td><code>GATE-PLAN</code></td>
+        <td>Joint</td>
+        <td>0.3</td>
+        <td>0.7</td>
+      </tr>
+      <tr>
+        <td><code>FEAT-01</code></td>
+        <td>Feature</td>
+        <td><code>REQ-F-001, NF-004</code></td>
+        <td>Імплементація Reference та валідації безпеки URL</td>
+        <td><code>TEST-01</code></td>
+        <td>ШІ-агент</td>
+        <td>0.5</td>
+        <td>0.2</td>
+      </tr>
+      <tr>
+        <td><code>TEST-02</code></td>
+        <td>Test</td>
+        <td><code>REQ-F-002, NF-003</code></td>
+        <td>Тести категорій та Fallback 'General' (SCN-05)</td>
+        <td><code>TEST-01</code></td>
+        <td>ШІ-агент</td>
+        <td>0.2</td>
+        <td>0.3</td>
+      </tr>
+      <tr>
+        <td><code>FEAT-02</code></td>
+        <td>Feature</td>
+        <td><code>REQ-F-002, NF-003</code></td>
+        <td>Реалізація категорій та захисту від втрати даних</td>
+        <td><code>FEAT-01, TEST-02</code></td>
+        <td>ШІ-агент</td>
+        <td>0.4</td>
+        <td>0.2</td>
+      </tr>
+      <tr>
+        <td><code>GATE-CORE</code></td>
+        <td>Gate</td>
+        <td>Ядро &amp; Безпека</td>
+        <td>Контрольна точка CORE-GATE (Аудит ядра та XSS)</td>
+        <td><code>FEAT-02</code></td>
+        <td>Людина</td>
+        <td>0.1</td>
+        <td>0.8</td>
+      </tr>
+      <tr>
+        <td><code>TEST-03</code></td>
+        <td>Test</td>
+        <td><code>REQ-F-004, 005, NF-001</code></td>
+        <td>Тести фасетів namespace:val та бенчмарк &lt; 50мс</td>
+        <td><code>GATE-CORE</code></td>
+        <td>ШІ-агент</td>
+        <td>0.3</td>
+        <td>0.3</td>
+      </tr>
+      <tr>
+        <td><code>FEAT-03</code></td>
+        <td>Feature</td>
+        <td><code>REQ-F-004, 005</code></td>
+        <td>Імплементація нормалізації тегів та фасетного індексу</td>
+        <td><code>TEST-03</code></td>
+        <td>ШІ-агент</td>
+        <td>0.6</td>
+        <td>0.2</td>
+      </tr>
+      <tr>
+        <td><code>TEST-04</code></td>
+        <td>Test</td>
+        <td><code>REQ-F-003, 006..008</code></td>
+        <td>Тести повнотекстового пошуку, колекцій та CRUD</td>
+        <td><code>TEST-03</code></td>
+        <td>ШІ-агент</td>
+        <td>0.3</td>
+        <td>0.3</td>
+      </tr>
+      <tr>
+        <td><code>FEAT-04</code></td>
+        <td>Feature</td>
+        <td><code>REQ-F-003, 006..008</code></td>
+        <td>Реалізація пошуку у Catalog, колекцій та видалення</td>
+        <td><code>FEAT-03, TEST-04</code></td>
+        <td>ШІ-агент</td>
+        <td>0.7</td>
+        <td>0.2</td>
+      </tr>
+      <tr>
+        <td><code>VERIF-ALL</code></td>
+        <td>Verification</td>
+        <td><code>REQ-NF-001, NF-005</code></td>
+        <td>Авто-верифікація тестового набору та SLA швидкодії</td>
+        <td><code>FEAT-04</code></td>
+        <td>CI Suite</td>
+        <td>0.3</td>
+        <td>0.2</td>
+      </tr>
+      <tr>
+        <td><code>VALID-UX</code></td>
+        <td>Validation</td>
+        <td><code>REQ-NF-002</code></td>
+        <td>Валідація людиною (UX audit, швидкість додавання)</td>
+        <td><code>VERIF-ALL</code></td>
+        <td>Людина</td>
+        <td>0.1</td>
+        <td>1.0</td>
+      </tr>
+      <tr>
+        <td><code>DOC-RTM</code></td>
+        <td>Documentation</td>
+        <td>Всі вимоги</td>
+        <td>Фіналізація документації та матриці RTM</td>
+        <td><code>VALID-UX</code></td>
+        <td>Joint</td>
+        <td>0.4</td>
+        <td>0.6</td>
+      </tr>
+      <tr>
+        <td><code>GATE-FINAL</code></td>
+        <td>Gate</td>
+        <td>Всі вимоги</td>
+        <td>Контрольна точка RELEASE-GATE (Схвалення релізу)</td>
+        <td><code>DOC-RTM</code></td>
+        <td>Людина</td>
+        <td>0.1</td>
+        <td>0.5</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5. Календарний розрахунок критичного шляху (CPM) та Human Bottleneck</h2>
+  <div class="callout">
+    <strong>Математичні результати CPM:</strong>
+    <ul>
+      <li>Загальна календарна тривалість (Critical Path): <strong>10.50 годин</strong>.</li>
+      <li>Сумарні трудовитрати проєкту: <strong>11.60 людино-годин</strong>.</li>
+      <li>Частка ШІ-агента: <strong>4.60 год (39.7%)</strong>.</li>
+      <li>Частка людини-інженера: <strong>7.00 год (60.3%)</strong>.</li>
+    </ul>
+  </div>
+  <p><strong>Людські дії як критичне «вузьке місце» (Human-in-the-loop bottleneck):</strong> Незважаючи на здатність мовної моделі генерувати код за лічені хвилини, <strong>понад 60% часу на критичному шляху займає діяльність людини</strong>: рецензування вимог, рев'ю сценаріїв безпеки та ухвалення управлінських рішень на контрольних точках Gate. Це доводить, що реальна пропускна здатність інженерного конвеєра лімітується саме когнітивною швидкістю людини, а не швидкістю кодогенерації.</p>
+
+  <h2>6. Порівняльний аналіз пропозицій агента та коректив студента</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Елемент планування</th>
+        <th>Первинна пропозиція ШІ-агента</th>
+        <th>Корективи студента після аудиту</th>
+        <th>Інженерне обґрунтування</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Структура тікетів</strong></td>
+        <td>Об'єднані задачі <code>TASK-01..08</code> (код + тест)</td>
+        <td>Жорстке розділення на <code>TEST-*</code> та <code>FEAT-*</code></td>
+        <td>Дотримання TDD: блокування кодування до створення тесту</td>
+      </tr>
+      <tr>
+        <td><strong>Контрольні точки</strong></td>
+        <td>Один фінальний Gate наприкінці релізу</td>
+        <td>Введено проміжну точку <code>GATE-CORE</code></td>
+        <td>Ізоляція критичних ризиків безпеки та цілісності даних</td>
+      </tr>
+      <tr>
+        <td><strong>Кореляція помилок</strong></td>
+        <td>Генерація коду і тестів єдиним промптом</td>
+        <td>Спільний режим <code>Joint</code> з рев'ю тест-векторів</td>
+        <td>Захист від створення хибно-позитивних тестів ШІ-агентом</td>
+      </tr>
+      <tr>
+        <td><strong>Оцінка часу</strong></td>
+        <td>Рівномірний час (по 30 хв на кожну задачу)</td>
+        <td>Збільшено оцінку часу людини на Stage-Gates</td>
+        <td>Реалістичне моделювання критичного шляху за методом CPM</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>7. Реєстр ризиків проєкту</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID Ризику</th>
+        <th>Категорія</th>
+        <th>Суть ризику та його прояв</th>
+        <th>Ранг (P×I)</th>
+        <th>Заходи запобігання та контролю</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>RSK-AI-01</strong></td>
+        <td>ШІ-конвеєр</td>
+        <td><strong>Кореляція помилок між тестом і кодом:</strong> агент підганяє тест під власний дефект</td>
+        <td><span class="badge badge-crit">20 (CRITICAL)</span></td>
+        <td>Сегрегація промптів: тест створюється і перевіряється людиною до генерації коду</td>
+      </tr>
+      <tr>
+        <td><strong>RSK-AI-02</strong></td>
+        <td>ШІ-конвеєр</td>
+        <td><strong>Розповзання меж (Gold Plating):</strong> генерація неспецифікованих фіч</td>
+        <td><span class="badge">12 (HIGH)</span></td>
+        <td>Тікети прив'язані до REQ-ID; неспецифікований код отримує статус <code>REJECTED</code></td>
+      </tr>
+      <tr>
+        <td><strong>RSK-AI-03</strong></td>
+        <td>ШІ-конвеєр</td>
+        <td><strong>Втрата контексту (Context Decay):</strong> дублювання або руйнування коду</td>
+        <td><span class="badge">12 (HIGH)</span></td>
+        <td>Атомарна подача контексту: агент отримує тільки локальний модуль і фрагмент SRS</td>
+      </tr>
+      <tr>
+        <td><strong>RSK-TR-01</strong></td>
+        <td>Традиційний</td>
+        <td><strong>Вразливість URL/XSS (REQ-NF-004):</strong> виконання шкідливого скрипту</td>
+        <td><span class="badge">10 (HIGH)</span></td>
+        <td>Сценарій <code>SCN-02</code>, негативні тести на ін'єкції, окремий аудит на <code>GATE-CORE</code></td>
+      </tr>
+      <tr>
+        <td><strong>RSK-TR-02</strong></td>
+        <td>Традиційний</td>
+        <td><strong>Втрата даних при видаленні категорій (REQ-NF-003):</strong> каскадне видалення</td>
+        <td><span class="badge">10 (HIGH)</span></td>
+        <td>Патерн Fallback to General, BDD-сценарій <code>SCN-05</code>, 0% втрати даних</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>8. Контрольна точка PLAN-GATE та висновки</h2>
+  <p>Перед початком систематичної реалізації проведено аудит за контрольним чек-листом у <code>logs/plan-gate.md</code>. Ухвалено рішення <strong>STATUS: APPROVED (GO)</strong>, що розблоковує виконання першого спринту розробки.</p>
+  <div class="callout" style="border-left-color: #10b981; background-color: #ecfdf5;">
+    <strong>Підсумковий висновок:</strong> Мета лабораторної роботи досягнута повністю. Сформовано наскрізний керований план SDD-проєкту, усунуто специфічні ризики автоматизованої кодогенерації, доведено критичну роль людини як головного лімітуючого фактора швидкості інженерного циклу та забезпечено 100% простежуваність артефактів.
+  </div>
+
+</body>
+</html>
