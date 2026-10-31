@@ -1,8 +1,8 @@
 # Матриця простежуваності вимог (Requirements Traceability Matrix, RTM)
 
 - **Проєкт:** Система каталогізації та швидкого пошуку дизайн-референсів (`web-app_for_design-references`)
-- **Етап SDLC:** Етап планування та організації життєвого циклу (Лабораторна робота №3, після проходження PLAN-GATE)
-- **Призначення:** Забезпечення наскрізної двонаправленої простежуваності між вимогами SRS v1.0, критеріями прийняття (AC), BDD-сценаріями, SDD-тікетами беклогу, тестами та кодом.
+- **Етап SDLC:** Етап проєктування REST API специфікації (Лабораторна робота №4, після проходження API-GATE)
+- **Призначення:** Забезпечення наскрізної двонаправленої простежуваності між вимогами SRS v1.0, критеріями прийняття (AC), BDD-сценаріями, SDD-тікетами беклогу, операціями REST API (OpenAPI 3.0.3), DTO-схемами, Mock-сценаріями та контрольними точками якості.
 
 ---
 
@@ -33,9 +33,29 @@
 
 ---
 
-## 3. Резюме простежуваності та статус готовності
+## 3. Матриця простежуваності REST API (OpenAPI Operations Traceability)
 
-- **Загальна кількість вимог:** 13 (8 функціональних, 5 нефункціональних).
-- **Покриття SDD-тікетами беклогу:** 100% вимог мають конкретні декомпозовані задачі на розробку тестів (`TEST-*`), коду (`FEAT-*`) та контрольних точок (`GATE-*`).
-- **Співвідношення залежностей:** Кожна функціональна задача `FEAT-*` жорстко заблокована виконанням передумови `TEST-*`, що гарантує збереження TDD/BDD-дисципліни.
-- **Точки підвищеного контролю (High Cost of Failure):** Вимоги `REQ-NF-004` (Безпека/XSS) та `REQ-NF-003` (Цілісність даних) захищені обов'язковою контрольною точкою `GATE-CORE` з участю людини.
+Ця секція встановлює прямий зв'язок між вимогами SRS v1.0 та формальним контрактом REST API (`spec/openapi.yaml`):
+
+| ID Вимоги | HTTP Метод | URI Ресурсу | OpenAPI `operationId` | Схеми запиту / відповіді | Коди помилок (ProblemDetails) | Сценарій тестування Mock API |
+|---|---|---|---|---|---|---|
+| `REQ-F-001`<br>`REQ-NF-004` | `POST` | `/api/v1/references` | `createReference` | **Req:** `ReferenceCreateDto`<br>**Resp (201):** `ReferenceResponseDto` | `400` (VALIDATION_FAILED)<br>`422` (UNSAFE_URL_PROTOCOL) | `POS-01`<br>`NEG-01`<br>`NEG-02` |
+| `REQ-F-002` | `GET`<br>`POST` | `/api/v1/categories`<br>`/api/v1/categories` | `listCategories`<br>`createCategory` | **Resp (200):** `CategoryResponseDto[]`<br>**Req:** `CategoryCreateDto` | `400` (CATEGORY_EXISTS)<br>`500` (INTERNAL_ERROR) | `POS-06` |
+| `REQ-F-003` | `GET`<br>`POST`<br>`GET`<br>`DELETE`<br>`POST`<br>`DELETE` | `/api/v1/collections`<br>`/api/v1/collections`<br>`/api/v1/collections/{id}`<br>`/api/v1/collections/{id}`<br>`/api/v1/collections/{id}/references/{ref_id}`<br>`/api/v1/collections/{id}/references/{ref_id}` | `listCollections`<br>`createCollection`<br>`getCollectionById`<br>`deleteCollection`<br>`addReferenceToCollection`<br>`removeReferenceFromCollection` | **Req:** `CollectionCreateDto`<br>**Resp (200):** `CollectionWithReferencesDto`<br>**Resp (204):** No Content | `400` (VALIDATION_FAILED)<br>`404` (COLLECTION_NOT_FOUND)<br>`404` (REFERENCE_NOT_FOUND) | `POS-05`<br>`NEG-06` |
+| `REQ-F-004`<br>`REQ-F-005` | `GET` | `/api/v1/references?tags=...` | `listReferences` | **Query:** `tags`, `category`<br>**Resp (200):** `ReferenceListResponse` | `400` (BAD_REQUEST)<br>`500` (INTERNAL_ERROR) | `POS-03` |
+| `REQ-F-006` | `GET` | `/api/v1/references?q=...` | `listReferences` | **Query:** `q`<br>**Resp (200):** `ReferenceListResponse` | `400` (BAD_REQUEST)<br>`500` (INTERNAL_ERROR) | `POS-04` |
+| `REQ-F-007` | `GET` | `/api/v1/references/{id}` | `getReferenceById` | **Resp (200):** `ReferenceResponseDto` | `404` (RESOURCE_NOT_FOUND)<br>`500` (INTERNAL_ERROR) | `POS-02`<br>`NEG-03` |
+| `REQ-F-008` | `PUT`<br>`DELETE` | `/api/v1/references/{id}`<br>`/api/v1/references/{id}` | `updateReference`<br>`deleteReference` | **Req:** `ReferenceUpdateDto`<br>**Resp (200):** `ReferenceResponseDto`<br>**Resp (204):** No Content | `400` (VALIDATION_FAILED)<br>`404` (RESOURCE_NOT_FOUND)<br>`422` (UNSAFE_URL_PROTOCOL) | `POS-07` |
+| `REQ-NF-001`<br>`REQ-NF-005` | `GET` | `/api/v1/health` | `getHealthStatus` | **Resp (200):** `HealthStatusDto` | `500` (INTERNAL_ERROR) | Сервісний SLA моніторинг |
+| `REQ-NF-003` | `DELETE` | `/api/v1/categories/{name}` | `deleteCategory` | **Resp (200):** `CategoryMigrationReportDto` | `400` (PROTECTED_RESOURCE)<br>`404` (CATEGORY_NOT_FOUND) | `POS-08`<br>`NEG-04` |
+
+---
+
+## 4. Резюме простежуваності та статус готовності
+
+- **Загальна кількість вимог SRS:** 13 (8 функціональних, 5 нефункціональних).
+- **Кількість спроєктованих REST API операцій:** 15 операцій на 8 URI-шляхах.
+- **Покриття вимог через REST API:** 100% функціональних та релевантних нефункціональних вимог мають відповідні HTTP-операції.
+- **Покриття мок-тестами:** 14 автоматизованих сценаріїв (8 позитивних `POS-*`, 6 негативних `NEG-*`) покривають 100% критичних операцій та валідацій.
+- **Єдина модель помилок:** 100% негативних статус-кодів (400, 404, 422, 500) типізовані через єдину схему `ProblemDetails` (RFC 7807).
+- **Результат API-GATE:** **APPROVED (GO)** — дозвіл на перехід до фази TDD-імплементації в ЛР5.
