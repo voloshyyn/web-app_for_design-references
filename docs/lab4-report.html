@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Звіт з лабораторної роботи №4 — Проектування REST API за специфікацією</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1f2937;
+      --text-muted: #4b5563;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --border: #e5e7eb;
+      --bg-alt: #f9fafb;
+      --badge-pass: #10b981;
+      --badge-warn: #f59e0b;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    }
+    body {
+      font-family: var(--font-main);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.6;
+      margin: 0;
+      padding: 40px 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header {
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 24px;
+      margin-bottom: 32px;
+    }
+    h1 {
+      font-size: 28px;
+      margin: 0 0 8px 0;
+      color: #111827;
+      letter-spacing: -0.02em;
+    }
+    .subtitle {
+      font-size: 16px;
+      color: var(--primary);
+      font-weight: 600;
+      margin: 0 0 16px 0;
+    }
+    .meta-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      font-size: 14px;
+    }
+    .meta-card div strong {
+      display: block;
+      color: var(--text-muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    h2 {
+      font-size: 20px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 6px;
+      margin-top: 36px;
+      margin-bottom: 16px;
+      color: #111827;
+    }
+    h3 {
+      font-size: 16px;
+      margin-top: 24px;
+      margin-bottom: 8px;
+      color: #1f2937;
+    }
+    p, li {
+      font-size: 15px;
+      color: var(--text);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px 0;
+      font-size: 13.5px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      color: #111827;
+    }
+    tr:nth-child(even) {
+      background: var(--bg-alt);
+    }
+    code {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      background: #f1f5f9;
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: #0f172a;
+    }
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .badge-pass {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    .badge-method {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .method-get { background: #e0f2fe; color: #0369a1; }
+    .method-post { background: #dcfce7; color: #15803d; }
+    .method-put { background: #fef3c7; color: #b45309; }
+    .method-delete { background: #fee2e2; color: #b91c1c; }
+    .callout {
+      border-left: 4px solid var(--primary);
+      background: #eff6ff;
+      padding: 14px 18px;
+      border-radius: 0 8px 8px 0;
+      margin: 18px 0;
+      font-size: 14.5px;
+    }
+    .callout-title {
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 4px;
+    }
+    @media print {
+      body { padding: 0; }
+      pre, table { page-break-inside: avoid; }
+      h2 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Звіт з лабораторної роботи №4</h1>
+      <div class="subtitle">Проектування інформаційних систем — REST API за специфікацією (API-First SDD)</div>
+      <div class="meta-card">
+        <div><strong>Студент</strong>Андрій Волошин (гр. КН-21)</div>
+        <div><strong>Кодинговий агент</strong>Antigravity AI (Gemini 3.8 Flash)</div>
+        <div><strong>Репозиторій</strong><a href="https://github.com/voloshyyn/web-app_for_design-references" target="_blank">github.com/voloshyyn/...</a></div>
+        <div><strong>Дата</strong>31 жовтня 2026 р.</div>
+      </div>
+    </header>
+
+    <section>
+      <h2>1. Мета роботи та вхідні артефакти</h2>
+      <p><strong>Мета роботи:</strong> Опанувати API-first підхід у парадигмі <strong>Specification-Driven Development (SDD)</strong> та здійснити перехід від затверджених вимог (SRS Baseline v1.0) до формального машинозчитуваного контракту REST API. Спроєктувати ресурси, URI, схеми запитів та відповідей (DTO), єдину модель помилок RFC 7807 (Problem Details), створити специфікацію <strong>OpenAPI 3.0.3</strong>, провести її автоматичну валідацію лінтером, розгорнути <strong>Mock API</strong> без коду сервера, верифікувати 14 позитивних і негативних сценаріїв та провести контрольну точку <strong>API-GATE</strong>.</p>
+      <p><strong>Вхідні артефакти:</strong> Затверджена специфікація SRS v1.0 (<code>spec/srs.md</code>), глосарій термінів (<code>spec/glossary.md</code>), BDD-сценарії (<code>spec/bdd-scenarios.md</code>), SDD-беклог та матриця RTM, сформовані в ЛР2 і ЛР3.</p>
+    </section>
+
+    <section>
+      <h2>2. Модель REST-ресурсів та декомпозиція</h2>
+      <p>Згідно з принципами REST та єдиною мовою глосарію (Ubiquitous Language), систему декомпозовано на 4 ключові ресурси:</p>
+      <ul>
+        <li><code>/references</code> — основні картки референсів (створення, кон'юнктивна фільтрація за тегами, повнотекстовий пошук, пагінація).</li>
+        <li><code>/collections</code> — тематичні користувацькі колекції та дошки проєктів (N:M зв'язок).</li>
+        <li><code>/categories</code> — класифікація верхнього рівня з механізмом нульової втрати даних (Fallback to <code>General</code>).</li>
+        <li><code>/health</code> — системний ендпоінт перевірки працездатності сервісу та бенчмарку SLA (&lt; 50 мс).</li>
+      </ul>
+      <div class="callout">
+        <div class="callout-title">Принцип інкапсуляції (Information Hiding)</div>
+        Внутрішній агрегат-менеджер <code>Catalog</code> та структура сховища надійно приховані від клієнта. Публічний інтерфейс оперує виключно уніфікованими DTO, унеможливлюючи витік деталей реалізації бекенду.
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Таблиця операцій REST API та трасування з REQ-ID</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>Метод</th>
+            <th>URI Ресурсу</th>
+            <th>OpenAPI operationId</th>
+            <th>REQ-ID</th>
+            <th>Призначення</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><span class="badge-method method-get">GET</span></td>
+            <td><code>/references</code></td>
+            <td><code>listReferences</code></td>
+            <td><code>REQ-F-005, 006, NF-001</code></td>
+            <td>Фільтрація за тегами (AND), повнотекстовий пошук, пагінація</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><span class="badge-method method-post">POST</span></td>
+            <td><code>/references</code></td>
+            <td><code>createReference</code></td>
+            <td><code>REQ-F-001, 002, NF-004</code></td>
+            <td>Створення референсу із санітизацією URL (http/https only)</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><span class="badge-method method-get">GET</span></td>
+            <td><code>/references/{id}</code></td>
+            <td><code>getReferenceById</code></td>
+            <td><code>REQ-F-007</code></td>
+            <td>Перегляд детальної картки референсу</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><span class="badge-method method-put">PUT</span></td>
+            <td><code>/references/{id}</code></td>
+            <td><code>updateReference</code></td>
+            <td><code>REQ-F-008, NF-004</code></td>
+            <td>Оновлення метаданих, тегів та нотаток</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><span class="badge-method method-delete">DELETE</span></td>
+            <td><code>/references/{id}</code></td>
+            <td><code>deleteReference</code></td>
+            <td><code>REQ-F-008</code></td>
+            <td>Видалення референсу без порушення цілісності колекцій</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><span class="badge-method method-get">GET</span></td>
+            <td><code>/collections</code></td>
+            <td><code>listCollections</code></td>
+            <td><code>REQ-F-003</code></td>
+            <td>Отримання списку тематичних дощок</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><span class="badge-method method-post">POST</span></td>
+            <td><code>/collections</code></td>
+            <td><code>createCollection</code></td>
+            <td><code>REQ-F-003</code></td>
+            <td>Створення нової користувацької колекції</td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><span class="badge-method method-get">GET</span></td>
+            <td><code>/collections/{id}</code></td>
+            <td><code>getCollectionById</code></td>
+            <td><code>REQ-F-003</code></td>
+            <td>Перегляд колекції з переліком прив'язаних референсів</td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><span class="badge-method method-delete">DELETE</span></td>
+            <td><code>/collections/{id}</code></td>
+            <td><code>deleteCollection</code></td>
+            <td><code>REQ-F-003</code></td>
+            <td>Видалення дошки без видалення референсів із каталогу</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><span class="badge-method method-post">POST</span></td>
+            <td><code>/collections/{id}/references/{ref_id}</code></td>
+            <td><code>addReferenceToCollection</code></td>
+            <td><code>REQ-F-003</code></td>
+            <td>Асоціація референсу з дошкою (N:M відношення)</td>
+          </tr>
+          <tr>
+            <td>11</td>
+            <td><span class="badge-method method-delete">DELETE</span></td>
+            <td><code>/collections/{id}/references/{ref_id}</code></td>
+            <td><code>removeReferenceFromCollection</code></td>
+            <td><code>REQ-F-003</code></td>
+            <td>Видалення референсу з колекції</td>
+          </tr>
+          <tr>
+            <td>12</td>
+            <td><span class="badge-method method-get">GET</span></td>
+            <td><code>/categories</code></td>
+            <td><code>listCategories</code></td>
+            <td><code>REQ-F-002</code></td>
+            <td>Отримання списку зареєстрованих категорій</td>
+          </tr>
+          <tr>
+            <td>13</td>
+            <td><span class="badge-method method-post">POST</span></td>
+            <td><code>/categories</code></td>
+            <td><code>createCategory</code></td>
+            <td><code>REQ-F-002</code></td>
+            <td>Створення нової категорії класифікації</td>
+          </tr>
+          <tr>
+            <td>14</td>
+            <td><span class="badge-method method-delete">DELETE</span></td>
+            <td><code>/categories/{name}</code></td>
+            <td><code>deleteCategory</code></td>
+            <td><code>REQ-NF-003</code></td>
+            <td>Видалення категорії з перенесенням референсів у 'General'</td>
+          </tr>
+          <tr>
+            <td>15</td>
+            <td><span class="badge-method method-get">GET</span></td>
+            <td><code>/health</code></td>
+            <td><code>getHealthStatus</code></td>
+            <td><code>REQ-NF-001, NF-005</code></td>
+            <td>Інфраструктурний моніторинг статусу та затримки SLA</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>4. Єдина модель помилок (RFC 7807 Problem Details)</h2>
+      <p>Усі помилкові HTTP-відповіді стандартизовано за стандартом <code>application/problem+json</code>:</p>
+      <pre><code>{
+  "type": "https://api.design-refs.local/errors/validation-error",
+  "title": "Validation Failed",
+  "status": 400,
+  "code": "VALIDATION_FAILED",
+  "detail": "Required fields validation failed.",
+  "instance": "/api/v1/references",
+  "timestamp": "2026-10-31T14:05:00Z",
+  "invalid_params": [
+    {
+      "name": "title",
+      "reason": "Title is required and cannot be empty."
+    }
+  ]
+}</code></pre>
+      <p>Застосовано коди: <code>UNSAFE_URL_PROTOCOL</code> (422), <code>VALIDATION_FAILED</code> (400), <code>RESOURCE_NOT_FOUND</code> (404), <code>PROTECTED_RESOURCE</code> (400), <code>MALFORMED_JSON</code> (400) та <code>INTERNAL_ERROR</code> (500).</p>
+    </section>
+
+    <section>
+      <h2>5. Результати автоматичної валідації специфікації OpenAPI</h2>
+      <p>Специфікація <code>spec/openapi.yaml</code> перевірена автоматичним лінтером <code>scripts/validate_openapi.py</code>:</p>
+      <ul>
+        <li><strong>Проаналізовано маршрутів (paths):</strong> 8</li>
+        <li><strong>Проаналізовано операцій:</strong> 15</li>
+        <li><strong>Операцій з x-req-id трасуванням:</strong> 15 / 15 (100.0%)</li>
+        <li><strong>Визначено компонентних схем:</strong> 13</li>
+        <li><strong>Синтаксичні та структурні помилки:</strong> 0</li>
+        <li><strong>Попередження:</strong> 0</li>
+        <li><strong>Статус валідації:</strong> <span class="badge badge-pass">PASSED (GO)</span></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Протокол тестування Mock API (14/14 Сценаріїв)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Тип</th>
+            <th>Назва сценарію</th>
+            <th>REQ-ID</th>
+            <th>Метод & URI</th>
+            <th>Очікуваний HTTP</th>
+            <th>Фактичний HTTP</th>
+            <th>Latency</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>POS-01</strong></td>
+            <td>Positive</td>
+            <td>Створення референсу з валідними полями</td>
+            <td><code>REQ-F-001</code></td>
+            <td><code>POST /references</code></td>
+            <td>201</td>
+            <td>201</td>
+            <td>30.2 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-02</strong></td>
+            <td>Positive</td>
+            <td>Отримання картки за ID</td>
+            <td><code>REQ-F-007</code></td>
+            <td><code>GET /references/ref-001</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.6 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-03</strong></td>
+            <td>Positive</td>
+            <td>Кон'юнктивна фільтрація за тегами (AND)</td>
+            <td><code>REQ-F-005</code></td>
+            <td><code>GET /references?tags=...</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.6 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-04</strong></td>
+            <td>Positive</td>
+            <td>Повнотекстовий пошук за підрядком</td>
+            <td><code>REQ-F-006</code></td>
+            <td><code>GET /references?q=dashboard</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.5 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-05</strong></td>
+            <td>Positive</td>
+            <td>Додавання референсу до колекції (N:M)</td>
+            <td><code>REQ-F-003</code></td>
+            <td><code>POST /collections/col-01/...</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.6 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-06</strong></td>
+            <td>Positive</td>
+            <td>Отримання списку категорій із 'General'</td>
+            <td><code>REQ-F-002</code></td>
+            <td><code>GET /categories</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.5 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-07</strong></td>
+            <td>Positive</td>
+            <td>Оновлення метаданих референсу</td>
+            <td><code>REQ-F-008</code></td>
+            <td><code>PUT /references/ref-001</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.6 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>POS-08</strong></td>
+            <td>Positive</td>
+            <td>Безпечне видалення категорії з міграцією</td>
+            <td><code>REQ-NF-003</code></td>
+            <td><code>DELETE /categories/Branding</code></td>
+            <td>200</td>
+            <td>200</td>
+            <td>0.6 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>NEG-01</strong></td>
+            <td>Negative</td>
+            <td>Безпека: блокування протоколу javascript:</td>
+            <td><code>REQ-NF-004</code></td>
+            <td><code>POST /references</code></td>
+            <td>422</td>
+            <td>422</td>
+            <td>0.8 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>NEG-02</strong></td>
+            <td>Negative</td>
+            <td>Валідація: відхилення порожнього заголовка</td>
+            <td><code>REQ-F-001</code></td>
+            <td><code>POST /references</code></td>
+            <td>400</td>
+            <td>400</td>
+            <td>0.8 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>NEG-03</strong></td>
+            <td>Negative</td>
+            <td>Відсутність ресурсу: неіснуючий ID</td>
+            <td><code>REQ-F-007</code></td>
+            <td><code>GET /references/non-existent</code></td>
+            <td>404</td>
+            <td>404</td>
+            <td>0.7 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>NEG-04</strong></td>
+            <td>Negative</td>
+            <td>Цілісність: заборона видалення 'General'</td>
+            <td><code>REQ-NF-003</code></td>
+            <td><code>DELETE /categories/General</code></td>
+            <td>400</td>
+            <td>400</td>
+            <td>0.7 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>NEG-05</strong></td>
+            <td>Negative</td>
+            <td>Синтаксис: відхилення невалідного JSON</td>
+            <td><code>REQ-NF-005</code></td>
+            <td><code>POST /references</code></td>
+            <td>400</td>
+            <td>400</td>
+            <td>0.7 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+          <tr>
+            <td><strong>NEG-06</strong></td>
+            <td>Negative</td>
+            <td>Неіснуюча колекція: асоціація з col-999</td>
+            <td><code>REQ-F-003</code></td>
+            <td><code>POST /collections/col-999/...</code></td>
+            <td>404</td>
+            <td>404</td>
+            <td>0.6 мс</td>
+            <td><span class="badge badge-pass">PASSED</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>Результат:</strong> 14/14 сценаріїв успішно пройдено. Середній час відповіді Mock API склав 2.7 мс (SLA &lt; 50 мс перевиконано в 18 разів).</p>
+    </section>
+
+    <section>
+      <h2>7. Рішення контрольної точки API-GATE</h2>
+      <div class="callout">
+        <div class="callout-title">Вердикт API-GATE: APPROVED (GO)</div>
+        Усі 10 обов'язкових умов шлюзу якості виконано на 100%. Контракт REST API (<code>spec/openapi.yaml</code>) офіційно затверджено як незмінну базову лінію для реалізації за методологією Test-Driven Development (TDD) у Лабораторній роботі №5.
+      </div>
+    </section>
+
+    <section>
+      <h2>8. Висновки</h2>
+      <p>У ході виконання лабораторної роботи №4 опановано практичний перехід від специфікації вимог SRS v1.0 до суворого REST API контракту в межах SDD. Забезпечено 100% покриття функціональних і нефункціональних вимог, налаштовано автоматичну валідацію лінтером та підтверджено працездатність системи на Mock API.</p>
+    </section>
+  </div>
+</body>
+</html>
