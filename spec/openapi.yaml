@@ -1,0 +1,934 @@
+openapi: 3.0.3
+info:
+  title: Design Reference Catalog REST API
+  description: |
+    REST API contract for the "Design Reference Catalog & Quick Search System" (`web-app_for_design-references`).
+    Designed following API-First principles and Specification-Driven Development (SDD).
+    Fully aligned with IEEE 830 SRS Baseline v1.0 and domain glossary (`spec/glossary.md`).
+  version: 1.0.0
+  contact:
+    name: Andrii Voloshyn
+    email: voloshyn.andrii_kn31@edu.kpi.ua
+  license:
+    name: MIT
+
+servers:
+  - url: http://localhost:8000/api/v1
+    description: Local Mock Server / Development Environment
+
+tags:
+  - name: References
+    description: Core visual design references CRUD and filtering operations (REQ-F-001, REQ-F-004, REQ-F-005, REQ-F-006, REQ-F-007, REQ-F-008)
+  - name: Collections
+    description: Project board groupings (N:M relationship) (REQ-F-003)
+  - name: Categories
+    description: Mutually exclusive high-level classification with zero-data-loss fallback (REQ-F-002, REQ-NF-003)
+  - name: System
+    description: Service health and metadata checks (REQ-NF-001, REQ-NF-005)
+
+paths:
+  /references:
+    get:
+      tags:
+        - References
+      summary: List and filter references
+      description: |
+        Retrieves references with support for conjunctive tag filtering (AND semantics),
+        full-text search across title, notes, and tags, and optional category filtering.
+      operationId: listReferences
+      x-req-id:
+        - REQ-F-005
+        - REQ-F-006
+        - REQ-NF-001
+      parameters:
+        - name: tags
+          in: query
+          description: Comma-separated list of tags/facets to filter by (all tags must match - AND semantics)
+          required: false
+          schema:
+            type: string
+            example: "minimalism,style:clean"
+        - name: q
+          in: query
+          description: Case-insensitive search query matching title, notes, or tags
+          required: false
+          schema:
+            type: string
+            example: "dashboard"
+        - name: category
+          in: query
+          description: Filter by primary category name
+          required: false
+          schema:
+            type: string
+            example: "UI/UX"
+        - name: limit
+          in: query
+          description: Maximum number of records to return
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: offset
+          in: query
+          description: Number of records to skip
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: List of references matching criteria
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceListResponse'
+              examples:
+                filteredList:
+                  summary: Example search results
+                  value:
+                    items:
+                      - id: "ref-001"
+                        title: "SaaS Analytics Dashboard UI"
+                        url: "https://dribbble.com/shots/12345-saas-dashboard"
+                        image_url: "https://images.example.com/shots/12345.png"
+                        category: "UI/UX"
+                        tags: ["dashboard", "saas", "style:minimalism"]
+                        notes: "Clean charts and dark mode palette"
+                        created_at: "2026-10-15T12:00:00Z"
+                    total: 1
+                    limit: 50
+                    offset: 0
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - References
+      summary: Create a new reference
+      description: |
+        Registers a new visual reference. Validates URL protocols against XSS/injections (http:// and https:// only).
+        Assigns default category 'General' if category is omitted.
+      operationId: createReference
+      x-req-id:
+        - REQ-F-001
+        - REQ-F-002
+        - REQ-NF-002
+        - REQ-NF-004
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReferenceCreateDto'
+            examples:
+              validReference:
+                summary: Valid new reference payload
+                value:
+                  title: "Fintech Mobile Banking Onboarding"
+                  url: "https://mobbin.com/apps/fintech-app"
+                  image_url: "https://images.example.com/preview.png"
+                  category: "UI/UX"
+                  tags: ["fintech", "mobile", "onboarding", "style:neumorphism"]
+                  notes: "Smooth micro-interactions on swipe"
+      responses:
+        '201':
+          description: Reference created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceResponseDto'
+              examples:
+                created:
+                  value:
+                    id: "ref-102"
+                    title: "Fintech Mobile Banking Onboarding"
+                    url: "https://mobbin.com/apps/fintech-app"
+                    image_url: "https://images.example.com/preview.png"
+                    category: "UI/UX"
+                    tags: ["fintech", "mobile", "onboarding", "style:neumorphism"]
+                    notes: "Smooth micro-interactions on swipe"
+                    created_at: "2026-10-31T14:00:00Z"
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntityError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /references/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique reference identifier
+        schema:
+          type: string
+          example: "ref-001"
+
+    get:
+      tags:
+        - References
+      summary: Get reference details
+      description: Returns complete details and metadata of an individual reference card.
+      operationId: getReferenceById
+      x-req-id:
+        - REQ-F-007
+      responses:
+        '200':
+          description: Reference found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceResponseDto'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    put:
+      tags:
+        - References
+      summary: Update reference
+      description: Updates editable fields of a reference (title, category, tags, notes, image_url).
+      operationId: updateReference
+      x-req-id:
+        - REQ-F-008
+        - REQ-NF-004
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReferenceUpdateDto'
+      responses:
+        '200':
+          description: Reference updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReferenceResponseDto'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntityError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - References
+      summary: Delete reference
+      description: |
+        Deletes a reference permanently. Automatically dissociates the reference from all collections
+        without cascade corruption.
+      operationId: deleteReference
+      x-req-id:
+        - REQ-F-008
+      responses:
+        '204':
+          description: Reference successfully deleted (no content)
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /collections:
+    get:
+      tags:
+        - Collections
+      summary: List all collections
+      description: Retrieves all thematic project boards created by the user.
+      operationId: listCollections
+      x-req-id:
+        - REQ-F-003
+      responses:
+        '200':
+          description: List of collections
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CollectionResponseDto'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - Collections
+      summary: Create a collection
+      description: Creates a new project collection board to group references.
+      operationId: createCollection
+      x-req-id:
+        - REQ-F-003
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionCreateDto'
+      responses:
+        '201':
+          description: Collection created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionResponseDto'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /collections/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Unique collection identifier
+        schema:
+          type: string
+          example: "col-01"
+
+    get:
+      tags:
+        - Collections
+      summary: Get collection details
+      description: Returns collection metadata along with its associated reference IDs.
+      operationId: getCollectionById
+      x-req-id:
+        - REQ-F-003
+      responses:
+        '200':
+          description: Collection details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionWithReferencesDto'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Collections
+      summary: Delete collection
+      description: Deletes a collection board. Does NOT delete referenced items from the catalog.
+      operationId: deleteCollection
+      x-req-id:
+        - REQ-F-003
+      responses:
+        '204':
+          description: Collection deleted
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /collections/{id}/references/{ref_id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Target collection identifier
+        schema:
+          type: string
+          example: "col-01"
+      - name: ref_id
+        in: path
+        required: true
+        description: Reference identifier to associate or remove
+        schema:
+          type: string
+          example: "ref-001"
+
+    post:
+      tags:
+        - Collections
+      summary: Add reference to collection
+      description: Associates an existing reference with a collection (N:M relation).
+      operationId: addReferenceToCollection
+      x-req-id:
+        - REQ-F-003
+      responses:
+        '200':
+          description: Reference linked to collection successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionWithReferencesDto'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    delete:
+      tags:
+        - Collections
+      summary: Remove reference from collection
+      description: Dissociates reference from collection without removing it from global catalog.
+      operationId: removeReferenceFromCollection
+      x-req-id:
+        - REQ-F-003
+      responses:
+        '204':
+          description: Reference unlinked from collection
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /categories:
+    get:
+      tags:
+        - Categories
+      summary: List all registered categories
+      description: Retrieves the list of available categories including default 'General'.
+      operationId: listCategories
+      x-req-id:
+        - REQ-F-002
+      responses:
+        '200':
+          description: List of category names
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoryResponseDto'
+              examples:
+                defaultCategories:
+                  value:
+                    - name: "General"
+                      is_default: true
+                    - name: "UI/UX"
+                      is_default: false
+                    - name: "Branding"
+                      is_default: false
+                    - name: "3D"
+                      is_default: false
+                    - name: "Typography"
+                      is_default: false
+                    - name: "Motion"
+                      is_default: false
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+    post:
+      tags:
+        - Categories
+      summary: Register a new category
+      description: Creates a new user category for high-level classification.
+      operationId: createCategory
+      x-req-id:
+        - REQ-F-002
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryCreateDto'
+      responses:
+        '201':
+          description: Category created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponseDto'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /categories/{name}:
+    parameters:
+      - name: name
+        in: path
+        required: true
+        description: Name of category to delete
+        schema:
+          type: string
+          example: "Branding"
+
+    delete:
+      tags:
+        - Categories
+      summary: Delete category with zero-loss fallback
+      description: |
+        Removes a custom category. All references formerly belonging to this category are automatically
+        reassigned to the default 'General' category (0% data loss guarantee).
+        Attempting to delete 'General' is rejected with HTTP 400.
+      operationId: deleteCategory
+      x-req-id:
+        - REQ-NF-003
+      responses:
+        '200':
+          description: Category removed and references safely migrated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryMigrationReportDto'
+              examples:
+                migrationDone:
+                  value:
+                    message: "Category 'Branding' removed successfully."
+                    reassigned_to: "General"
+                    affected_references_count: 4
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+  /health:
+    get:
+      tags:
+        - System
+      summary: Service health check
+      description: Returns health status, SLA metrics and API metadata.
+      operationId: getHealthStatus
+      x-req-id:
+        - REQ-NF-001
+        - REQ-NF-005
+      responses:
+        '200':
+          description: System operational
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthStatusDto'
+              examples:
+                healthy:
+                  value:
+                    status: "healthy"
+                    version: "1.0.0"
+                    service: "design-reference-catalog-api"
+                    timestamp: "2026-10-31T14:00:00Z"
+                    latency_target_ms: 50
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+
+components:
+  schemas:
+    # --------------------------------------------------------------------------
+    # Reference Schemas
+    # --------------------------------------------------------------------------
+    ReferenceResponseDto:
+      type: object
+      required:
+        - id
+        - title
+        - url
+        - category
+        - tags
+        - notes
+        - created_at
+      properties:
+        id:
+          type: string
+          example: "ref-001"
+          description: Unique system generated reference identifier
+        title:
+          type: string
+          example: "Minimalist Landing Page Design"
+          description: User-assigned reference title
+        url:
+          type: string
+          format: uri
+          example: "https://example.com/inspiration-1"
+          description: Validated web source URL (HTTP/HTTPS only)
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+          example: "https://example.com/preview.png"
+          description: Optional preview image URL
+        category:
+          type: string
+          example: "UI/UX"
+          default: "General"
+          description: Primary classification category
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["minimalism", "landing", "style:clean"]
+          description: Normalized tags and facet markers (namespace:value)
+        notes:
+          type: string
+          example: "Good inspiration for hero section layout"
+          description: Optional personal commentary
+        created_at:
+          type: string
+          format: date-time
+          example: "2026-10-15T10:30:00Z"
+
+    ReferenceCreateDto:
+      type: object
+      required:
+        - title
+        - url
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Minimalist Landing Page Design"
+          description: Non-empty reference title
+        url:
+          type: string
+          format: uri
+          pattern: "^https?://"
+          example: "https://example.com/inspiration-1"
+          description: Source URL adhering strictly to http:// or https:// protocol
+        image_url:
+          type: string
+          format: uri
+          pattern: "^https?://"
+          nullable: true
+          example: "https://example.com/preview.png"
+          description: Optional preview image URL adhering strictly to http:// or https:// protocol
+        category:
+          type: string
+          default: "General"
+          example: "UI/UX"
+          description: Classification category (defaults to 'General' if omitted)
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["minimalism", "landing", "style:clean"]
+          description: List of tags and facet tags to assign
+        notes:
+          type: string
+          default: ""
+          example: "Good inspiration for hero section layout"
+
+    ReferenceUpdateDto:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: "Updated Title"
+        category:
+          type: string
+          example: "Typography"
+        image_url:
+          type: string
+          format: uri
+          pattern: "^https?://"
+          nullable: true
+          example: "https://example.com/updated.png"
+        tags:
+          type: array
+          items:
+            type: string
+          example: ["typography", "branding"]
+        notes:
+          type: string
+          example: "Revised feedback note"
+
+    ReferenceListResponse:
+      type: object
+      required:
+        - items
+        - total
+        - limit
+        - offset
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReferenceResponseDto'
+        total:
+          type: integer
+          example: 142
+        limit:
+          type: integer
+          example: 50
+        offset:
+          type: integer
+          example: 0
+
+    # --------------------------------------------------------------------------
+    # Collection Schemas
+    # --------------------------------------------------------------------------
+    CollectionResponseDto:
+      type: object
+      required:
+        - id
+        - name
+        - reference_count
+      properties:
+        id:
+          type: string
+          example: "col-01"
+        name:
+          type: string
+          example: "E-Commerce Client Project"
+        description:
+          type: string
+          nullable: true
+          example: "Moodboard for client pitch"
+        reference_count:
+          type: integer
+          example: 8
+
+    CollectionCreateDto:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+          example: "E-Commerce Client Project"
+        description:
+          type: string
+          nullable: true
+          example: "Moodboard for client pitch"
+
+    CollectionWithReferencesDto:
+      type: object
+      required:
+        - id
+        - name
+        - reference_ids
+      properties:
+        id:
+          type: string
+          example: "col-01"
+        name:
+          type: string
+          example: "E-Commerce Client Project"
+        description:
+          type: string
+          nullable: true
+        reference_ids:
+          type: array
+          items:
+            type: string
+          example: ["ref-001", "ref-002"]
+
+    # --------------------------------------------------------------------------
+    # Category Schemas
+    # --------------------------------------------------------------------------
+    CategoryResponseDto:
+      type: object
+      required:
+        - name
+        - is_default
+      properties:
+        name:
+          type: string
+          example: "UI/UX"
+        is_default:
+          type: boolean
+          example: false
+
+    CategoryCreateDto:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: "3D Art"
+
+    CategoryMigrationReportDto:
+      type: object
+      required:
+        - message
+        - reassigned_to
+        - affected_references_count
+      properties:
+        message:
+          type: string
+          example: "Category 'Branding' removed successfully."
+        reassigned_to:
+          type: string
+          example: "General"
+        affected_references_count:
+          type: integer
+          example: 4
+
+    # --------------------------------------------------------------------------
+    # System Schemas
+    # --------------------------------------------------------------------------
+    HealthStatusDto:
+      type: object
+      required:
+        - status
+        - version
+        - service
+        - timestamp
+      properties:
+        status:
+          type: string
+          example: "healthy"
+        version:
+          type: string
+          example: "1.0.0"
+        service:
+          type: string
+          example: "design-reference-catalog-api"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-10-31T14:00:00Z"
+        latency_target_ms:
+          type: integer
+          example: 50
+
+    # --------------------------------------------------------------------------
+    # Unified Error Model (RFC 7807 / Problem Details)
+    # --------------------------------------------------------------------------
+    ProblemDetails:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - code
+        - timestamp
+      properties:
+        type:
+          type: string
+          format: uri
+          example: "https://api.design-refs.local/errors/validation-error"
+          description: URI identifier categorizing error type
+        title:
+          type: string
+          example: "Validation Failed"
+          description: Short human-readable summary of problem
+        status:
+          type: integer
+          example: 422
+          description: HTTP status code
+        detail:
+          type: string
+          example: "Invalid URL scheme. Only 'http://' and 'https://' are permitted."
+          description: Specific description of failure instance
+        code:
+          type: string
+          example: "UNSAFE_URL_PROTOCOL"
+          description: Machine-readable specific error code
+        instance:
+          type: string
+          example: "/api/v1/references"
+          description: Specific URI path where error occurred
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-10-31T14:05:00Z"
+        invalid_params:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvalidParam'
+          description: List of invalid field parameters (if applicable)
+
+    InvalidParam:
+      type: object
+      required:
+        - name
+        - reason
+      properties:
+        name:
+          type: string
+          example: "url"
+        reason:
+          type: string
+          example: "Must start with http:// or https://"
+
+  # ----------------------------------------------------------------------------
+  # Reusable Responses
+  # ----------------------------------------------------------------------------
+  responses:
+    BadRequestError:
+      description: Bad request / malformed syntax
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            badRequest:
+              value:
+                type: "https://api.design-refs.local/errors/bad-request"
+                title: "Bad Request"
+                status: 400
+                code: "MALFORMED_REQUEST"
+                detail: "Request payload contains malformed JSON or missing required fields."
+                instance: "/api/v1/references"
+                timestamp: "2026-10-31T14:05:00Z"
+                invalid_params:
+                  - name: "title"
+                    reason: "Field is required and cannot be empty."
+
+    NotFoundError:
+      description: Requested resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            notFound:
+              value:
+                type: "https://api.design-refs.local/errors/not-found"
+                title: "Resource Not Found"
+                status: 404
+                code: "RESOURCE_NOT_FOUND"
+                detail: "Reference with ID 'ref-999' was not found in catalog."
+                instance: "/api/v1/references/ref-999"
+                timestamp: "2026-10-31T14:05:00Z"
+
+    UnprocessableEntityError:
+      description: Semantic or security validation violation
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            securityViolation:
+              value:
+                type: "https://api.design-refs.local/errors/security-violation"
+                title: "Security Violation"
+                status: 422
+                code: "UNSAFE_URL_PROTOCOL"
+                detail: "Invalid URL scheme 'javascript:'. Only 'http://' and 'https://' are permitted."
+                instance: "/api/v1/references"
+                timestamp: "2026-10-31T14:05:00Z"
+                invalid_params:
+                  - name: "url"
+                    reason: "Unsafe protocol rejected by REQ-NF-004."
+
+    InternalServerError:
+      description: Unexpected internal server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ProblemDetails'
+          examples:
+            serverError:
+              value:
+                type: "https://api.design-refs.local/errors/internal-error"
+                title: "Internal Server Error"
+                status: 500
+                code: "INTERNAL_ERROR"
+                detail: "An unexpected error occurred while processing the request."
+                instance: "/api/v1/references"
+                timestamp: "2026-10-31T14:05:00Z"
