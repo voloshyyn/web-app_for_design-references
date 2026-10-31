@@ -1,0 +1,14 @@
+============================================================
+OpenAPI Specification Automated Validation Report
+Target Specification: openapi.yaml
+Validation Status: PASSED (GO)
+============================================================
+Paths Analyzed: 8
+Operations Analyzed: 15
+Schemas Defined: 13
+Reusable Responses: 4
+Operations with x-req-id Traceability: 15/15 (100.0%)
+------------------------------------------------------------
+ERRORS DETECTED: 0 (Schema and references strictly valid)
+WARNINGS: 0
+============================================================
