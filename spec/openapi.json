@@ -3,7 +3,7 @@
   "info": {
     "title": "Design Reference Catalog REST API",
     "description": "REST API contract for the \"Design Reference Catalog & Quick Search System\" (`web-app_for_design-references`).\nDesigned following API-First principles and Specification-Driven Development (SDD).\nFully aligned with IEEE 830 SRS Baseline v1.0 and domain glossary (`spec/glossary.md`).\n",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "contact": {
       "name": "Andrii Voloshyn",
       "email": "voloshyn.andrii_kn31@edu.kpi.ua"
@@ -469,6 +469,47 @@
         "responses": {
           "204": {
             "description": "Collection deleted"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFoundError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerError"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Collections"
+        ],
+        "summary": "Rename collection preserving references",
+        "operationId": "updateCollection",
+        "x-req-id": [
+          "REQ-F-009"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionUpdateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Renamed collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionWithReferencesDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
           },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
@@ -1169,6 +1210,20 @@
           "reason": {
             "type": "string",
             "example": "Must start with http:// or https://"
+          }
+        }
+      },
+      "CollectionUpdateDto": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "pattern": "\\S"
           }
         }
       }
