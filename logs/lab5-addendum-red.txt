@@ -1,0 +1,282 @@
+FFFFFFFF                                                                 [100%]
+================================== FAILURES ===================================
+____________ test_rename_preserves_identity_links_and_persistence _____________
+
+api = <function api.<locals>.call at 0x000001AF6ADF0900>
+
+    def test_rename_preserves_identity_links_and_persistence(api):
+        ref = new_ref(api)
+        col = api('POST','/collections',{'name':'Moodboard','description':'Keep me'},201)
+        path = '/collections/'+col['id']
+        api('POST',path+'/references/'+ref['id'],template='/collections/{id}/references/{ref_id}')
+        before = api('GET',path,template='/collections/{id}')
+        for _ in range(2):
+>           assert api('PUT',path,{'name':'Client pitch'},template='/collections/{id}') == {**before,'name':'Client pitch'}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_addendum.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/ac0a3a203d2d4462ace5839333edb5f0'
+body = {'name': 'Client pitch'}, status = 200, template = '/collections/{id}'
+raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:26.390149+00:00", "instance": "/api/v1/collections/ac0a3a203d2d4462ace5839333edb5f0"}'
+E           assert 404 == 200
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+____________________ test_rename_invalid_is_atomic[body0] _____________________
+
+api = <function api.<locals>.call at 0x000001AF6ACCEE80>, body = {}
+
+    @pytest.mark.parametrize('body',[{}, {'name':''}, {'name':'   '}, {'name':None}, {'name':12}, {'name':'x'*101}])
+    def test_rename_invalid_is_atomic(api,body):
+        col = api('POST','/collections',{'name':'Before'},201)
+        path = '/collections/'+col['id']
+        before = api('GET',path,template='/collections/{id}')
+>       api('PUT',path,body,400,'/collections/{id}')
+
+tests\test_addendum.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/4f471109142b46abb23909b4f585abd2'
+body = {}, status = 400, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:26.937309+00:00", "instance": "/api/v1/collections/4f471109142b46abb23909b4f585abd2"}'
+E           assert 404 == 400
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+____________________ test_rename_invalid_is_atomic[body1] _____________________
+
+api = <function api.<locals>.call at 0x000001AF6AD7E520>, body = {'name': ''}
+
+    @pytest.mark.parametrize('body',[{}, {'name':''}, {'name':'   '}, {'name':None}, {'name':12}, {'name':'x'*101}])
+    def test_rename_invalid_is_atomic(api,body):
+        col = api('POST','/collections',{'name':'Before'},201)
+        path = '/collections/'+col['id']
+        before = api('GET',path,template='/collections/{id}')
+>       api('PUT',path,body,400,'/collections/{id}')
+
+tests\test_addendum.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/1cc1c99f29684b8881c38b839c319f61'
+body = {'name': ''}, status = 400, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:27.470639+00:00", "instance": "/api/v1/collections/1cc1c99f29684b8881c38b839c319f61"}'
+E           assert 404 == 400
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+____________________ test_rename_invalid_is_atomic[body2] _____________________
+
+api = <function api.<locals>.call at 0x000001AF6ADF1440>, body = {'name': '   '}
+
+    @pytest.mark.parametrize('body',[{}, {'name':''}, {'name':'   '}, {'name':None}, {'name':12}, {'name':'x'*101}])
+    def test_rename_invalid_is_atomic(api,body):
+        col = api('POST','/collections',{'name':'Before'},201)
+        path = '/collections/'+col['id']
+        before = api('GET',path,template='/collections/{id}')
+>       api('PUT',path,body,400,'/collections/{id}')
+
+tests\test_addendum.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/8c0ed0c1c7954418acf0e49276a09ed2'
+body = {'name': '   '}, status = 400, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:28.007557+00:00", "instance": "/api/v1/collections/8c0ed0c1c7954418acf0e49276a09ed2"}'
+E           assert 404 == 400
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+____________________ test_rename_invalid_is_atomic[body3] _____________________
+
+api = <function api.<locals>.call at 0x000001AF6ADF1260>, body = {'name': None}
+
+    @pytest.mark.parametrize('body',[{}, {'name':''}, {'name':'   '}, {'name':None}, {'name':12}, {'name':'x'*101}])
+    def test_rename_invalid_is_atomic(api,body):
+        col = api('POST','/collections',{'name':'Before'},201)
+        path = '/collections/'+col['id']
+        before = api('GET',path,template='/collections/{id}')
+>       api('PUT',path,body,400,'/collections/{id}')
+
+tests\test_addendum.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/83783e1491444d4fbb2a1e223cfc57aa'
+body = {'name': None}, status = 400, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:28.530596+00:00", "instance": "/api/v1/collections/83783e1491444d4fbb2a1e223cfc57aa"}'
+E           assert 404 == 400
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+____________________ test_rename_invalid_is_atomic[body4] _____________________
+
+api = <function api.<locals>.call at 0x000001AF6ADF1DA0>, body = {'name': 12}
+
+    @pytest.mark.parametrize('body',[{}, {'name':''}, {'name':'   '}, {'name':None}, {'name':12}, {'name':'x'*101}])
+    def test_rename_invalid_is_atomic(api,body):
+        col = api('POST','/collections',{'name':'Before'},201)
+        path = '/collections/'+col['id']
+        before = api('GET',path,template='/collections/{id}')
+>       api('PUT',path,body,400,'/collections/{id}')
+
+tests\test_addendum.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/d0624e238466465482ea4fbbf76d3d7e'
+body = {'name': 12}, status = 400, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:29.068920+00:00", "instance": "/api/v1/collections/d0624e238466465482ea4fbbf76d3d7e"}'
+E           assert 404 == 400
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+____________________ test_rename_invalid_is_atomic[body5] _____________________
+
+api = <function api.<locals>.call at 0x000001AF6ADF1E40>
+body = {'name': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
+
+    @pytest.mark.parametrize('body',[{}, {'name':''}, {'name':'   '}, {'name':None}, {'name':12}, {'name':'x'*101}])
+    def test_rename_invalid_is_atomic(api,body):
+        col = api('POST','/collections',{'name':'Before'},201)
+        path = '/collections/'+col['id']
+        before = api('GET',path,template='/collections/{id}')
+>       api('PUT',path,body,400,'/collections/{id}')
+
+tests\test_addendum.py:28: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/acffb3e8aa9748439afcf9d8d316c626'
+body = {'name': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
+status = 400, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:29.600685+00:00", "instance": "/api/v1/collections/acffb3e8aa9748439afcf9d8d316c626"}'
+E           assert 404 == 400
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+_____________________ test_rename_missing_and_max_length ______________________
+
+api = <function api.<locals>.call at 0x000001AF6ADF1EE0>
+
+    def test_rename_missing_and_max_length(api):
+        api('PUT','/collections/missing',{'name':'New'},404,'/collections/{id}')
+        col = api('POST','/collections',{'name':'Before'},201)
+>       result = api('PUT','/collections/'+col['id'],{'name':'x'*100},template='/collections/{id}')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_addendum.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/4c2fe086de4e4993a6b8658ccf12a2f3'
+body = {'name': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'}
+status = 200, template = '/collections/{id}', raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Found", "status": 404, "detail": "Unknown operation.", "code": "RESOURCE_NOT_F..., "timestamp": "2026-11-14T20:21:30.129086+00:00", "instance": "/api/v1/collections/4c2fe086de4e4993a6b8658ccf12a2f3"}'
+E           assert 404 == 200
+E            +  where 404 = <HTTPError 404: 'Not Found'>.status
+
+tests\test_api.py:51: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_addendum.py::test_rename_preserves_identity_links_and_persistence
+FAILED tests/test_addendum.py::test_rename_invalid_is_atomic[body0] - Asserti...
+FAILED tests/test_addendum.py::test_rename_invalid_is_atomic[body1] - Asserti...
+FAILED tests/test_addendum.py::test_rename_invalid_is_atomic[body2] - Asserti...
+FAILED tests/test_addendum.py::test_rename_invalid_is_atomic[body3] - Asserti...
+FAILED tests/test_addendum.py::test_rename_invalid_is_atomic[body4] - Asserti...
+FAILED tests/test_addendum.py::test_rename_invalid_is_atomic[body5] - Asserti...
+FAILED tests/test_addendum.py::test_rename_missing_and_max_length - Assertion...
+8 failed in 4.48s
