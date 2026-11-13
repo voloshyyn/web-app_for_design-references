@@ -1,0 +1,53 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+__________________ test_malformed_path_is_logged_as_problem ___________________
+
+api = <function api.<locals>.call at 0x0000028F1C4CCFE0>
+
+    def test_malformed_path_is_logged_as_problem(api):
+        responses = []
+>       raw = b''.join(api.app({
+            'REQUEST_METHOD': 'GET', 'PATH_INFO': '/api/v1/categories/\xff',
+            'QUERY_STRING': '', 'wsgi.input': io.BytesIO(),
+        }, lambda status, headers: responses.append((status, dict(headers)))))
+
+tests\test_audit_fixes.py:10: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <src.api.Application object at 0x0000028F1B933560>
+environ = {'REQUEST_METHOD': 'GET', 'PATH_INFO': '/api/v1/categories/ÿ', 'QUERY_STRING': '', 'wsgi.input': <_io.BytesIO object at 0x0000028F1C4B6B10>}
+start_response = <function test_malformed_path_is_logged_as_problem.<locals>.<lambda> at 0x0000028F1C4CD120>
+
+    def __call__(self, environ, start_response):
+        started = time.perf_counter()
+        request_id = uuid4().hex
+        method = environ['REQUEST_METHOD']
+>       path = environ.get('PATH_INFO','').encode('latin-1').decode('utf-8')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 19: invalid start byte
+
+src\api.py:45: UnicodeDecodeError
+________________ test_health_reports_current_contract_version _________________
+
+api = <function api.<locals>.call at 0x0000028F1C3B2200>
+
+    def test_health_reports_current_contract_version(api):
+>       assert api('GET', '/health')['version'] == api.app.contract['info']['version']
+E       AssertionError: assert '1.0.0' == '1.1.0'
+E         
+E         - 1.1.0
+E         + 1.0.0
+
+tests\test_audit_fixes.py:25: AssertionError
+________ test_report_status_never_promotes_failed_or_missing_evidence _________
+
+    def test_report_status_never_promotes_failed_or_missing_evidence():
+>       from scripts.lab5_status import report_status
+E       ModuleNotFoundError: No module named 'scripts.lab5_status'
+
+tests\test_audit_fixes.py:29: ModuleNotFoundError
+=========================== short test summary info ===========================
+FAILED tests/test_audit_fixes.py::test_malformed_path_is_logged_as_problem - ...
+FAILED tests/test_audit_fixes.py::test_health_reports_current_contract_version
+FAILED tests/test_audit_fixes.py::test_report_status_never_promotes_failed_or_missing_evidence
+3 failed in 1.23s
