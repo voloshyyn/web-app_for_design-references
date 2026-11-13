@@ -31,3 +31,16 @@
 Артефакти: docs/lab5-plan.md, spec/addendum-001-collection-rename.md,
 logs/lab5-test-gate.md, logs/lab5-addendum-test-gate.md, logs/lab5-final-gate.md.
 Тікети LAB5-01..06 локальні. Людська валідація та формальний Gate — PENDING/REVISE.
+
+## Актуалізація після аудиту 15.11.2026
+- Поточні TEST-GATE / SPEC-ADDENDUM-GATE: технічно прийнято агентом за
+  прямим дорученням користувача; див. logs/lab5-final-gate.md.
+- tests/test_audit_fixes.py перевіряє malformed path + audit, версію health,
+  обчислення статусів і генерацію PDF зі статусом FAIL.
+- REQ-F-001..009: logs/lab5-fault-detection.json — 9 перевірок вимкнення
+  операцій; це новий контроль чутливості, не історичний TDD.
+- Делегована валідація: logs/lab5-agent-validation.json, 14 HTTP-дій із
+  повним перезапуском сервера. Людська валідація NOT_PERFORMED.
+- Тікет ADD-001: docs/tickets/LAB5-04.md. UI-критерії залишаються поза
+  серверним обсягом; повна формальна відповідність людському пункту PDF
+  та історична повнота TDD не заявляються.
