@@ -17,6 +17,12 @@ from src.service import Service, ApiError
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def problem(status, code, detail, path):
+    """One representation for expected and unexpected failures."""
+    return dict(type='about:blank', title=HTTPStatus(status).phrase, status=status,
+                detail=detail, code=code, timestamp=timestamp(), instance=path)
+
+
 class Application:
     def __init__(self, data_path, log_path):
         self.service = Service(Repository(data_path))
@@ -61,14 +67,11 @@ class Application:
                 status, payload = self.service.execute(operation_id, match.groupdict(), query, body)
             except ApiError as error:
                 status = error.status
-                payload = dict(type='about:blank', title=HTTPStatus(status).phrase, status=status,
-                               detail=error.detail, code=error.code, timestamp=timestamp(), instance=path)
+                payload = problem(status, error.code, error.detail, path)
             except Exception as error:
                 status = 500
                 self.audit.write('error', request_id=request_id, error_type=type(error).__name__)
-                payload = dict(type='about:blank', title='Internal Server Error', status=500,
-                               detail='An unexpected error occurred.', code='INTERNAL_ERROR',
-                               timestamp=timestamp(), instance=path)
+                payload = problem(500, 'INTERNAL_ERROR', 'An unexpected error occurred.', path)
             # Escape HTML-sensitive characters in JSON without changing decoded values.
             encoded = b'' if status == 204 else json.dumps(payload, ensure_ascii=True).replace(
                 '<', '\\u003c').replace('>', '\\u003e').replace('&', '\\u0026').encode('utf-8')
