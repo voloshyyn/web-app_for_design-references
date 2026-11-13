@@ -142,6 +142,11 @@ class Service:
             cat.collections[col.id] = col
             self.descriptions[col.id] = body.get('description')
             return 201, self.collection(col.id, False)
+        if operation == 'updateCollection':
+            col = self.get(cat.collections, identifier)
+            text_field(body, 'name', 100, required=True)
+            col.name = body['name']
+            return 200, self.collection(identifier)
         if operation in {'getCollectionById','deleteCollection','addReferenceToCollection',
                          'removeReferenceFromCollection'}:
             col = self.get(cat.collections, identifier)
