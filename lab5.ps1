@@ -1,5 +1,5 @@
 param(
-    [ValidateSet('test','serve','demo')][string]$Action = 'test',
+    [ValidateSet('test','serve','demo','report')][string]$Action = 'test',
     [int]$Port = 8000
 )
 $ErrorActionPreference = 'Stop'
@@ -29,6 +29,13 @@ if ($Action -eq 'test') {
         if ($LASTEXITCODE -ne 0) { throw 'Test dependency installation failed.' }
     }
     & $labPython -X utf8 scripts/check_lab5.py
+} elseif ($Action -eq 'report') {
+    & $labPython -c 'import reportlab' 2>$null
+    if ($LASTEXITCODE -ne 0) {
+        & $labPython -m pip install --target .lab5-deps 'reportlab==4.4.9'
+        if ($LASTEXITCODE -ne 0) { throw 'PDF dependency installation failed.' }
+    }
+    & $labPython -X utf8 scripts/report_lab5.py
 } elseif ($Action -eq 'serve') {
     & $labPython -X utf8 -m src.api --port $Port
 } else {
