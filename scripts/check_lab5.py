@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 import sys
 from datetime import datetime, timezone
+from lab5_status import report_status
 
 ROOT = Path(__file__).resolve().parents[1]
 os.chdir(ROOT)
@@ -32,9 +33,11 @@ if coverage_code == 0:
     if percentage < 95:
         code = 1
 status = 'PASS' if code == 0 and coverage_code == 0 else 'FAIL'
+validation_code = run(['scripts/validate_lab5.py'], 'logs/lab5-agent-validation.txt')
+validation = json.loads((ROOT/'logs/lab5-agent-validation.json').read_text(encoding='utf-8')) if validation_code == 0 else {'status':'FAIL'}
+decision = report_status({'automated_status': status}, validation)
 (ROOT/'logs/lab5-verification.json').write_text(json.dumps(dict(
     timestamp=datetime.now(timezone.utc).isoformat(), automated_status=status,
-    model_coverage_percent=percentage, human_validation='PENDING',
-    final_gate='REVISE: human validation pending'), indent=2), encoding='utf-8')
-print(f'Automated verification: {status}; model coverage: {percentage:.1f}%; human validation: PENDING')
-sys.exit(0 if status == 'PASS' else 1)
+    model_coverage_percent=percentage, **{k:v for k,v in decision.items() if k != 'automated_status'}), indent=2), encoding='utf-8')
+print(f'Automated verification: {status}; model coverage: {percentage:.1f}%; delegated technical gate: {decision["technical_gate"]}')
+sys.exit(0 if decision['technical_gate'] == 'GO' else 1)

@@ -1,0 +1,42 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+____________ test_rename_preserves_identity_links_and_persistence _____________
+
+api = <function api.<locals>.call at 0x000002936951CFE0>
+
+    def test_rename_preserves_identity_links_and_persistence(api):
+        ref = new_ref(api)
+        col = api('POST','/collections',{'name':'Moodboard','description':'Keep me'},201)
+        path = '/collections/'+col['id']
+        api('POST',path+'/references/'+ref['id'],template='/collections/{id}/references/{ref_id}')
+        before = api('GET',path,template='/collections/{id}')
+        for _ in range(2):
+>           assert api('PUT',path,{'name':'Client pitch'},template='/collections/{id}') == {**before,'name':'Client pitch'}
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_addendum.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'PUT', path = '/collections/bfa0a52c521f49ddbae043697810bab7'
+body = {'name': 'Client pitch'}, status = 200, template = '/collections/{id}'
+raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Implemented", "status": 501, "detail": "Audit fault injection", "code": "INJEC..., "timestamp": "2026-11-14T22:47:51.896065+00:00", "instance": "/api/v1/collections/bfa0a52c521f49ddbae043697810bab7"}'
+E           assert 501 == 200
+E            +  where 501 = <HTTPError 501: 'Not Implemented'>.status
+
+tests\test_api.py:51: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_addendum.py::test_rename_preserves_identity_links_and_persistence
+1 failed in 0.68s

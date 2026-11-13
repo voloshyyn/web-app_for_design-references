@@ -3,3 +3,4 @@ jsonschema==4.26.0
 PyYAML==6.0.3
 coverage==7.17.3
 openapi-spec-validator==0.9.0
+reportlab==4.4.9

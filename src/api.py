@@ -29,6 +29,7 @@ class Application:
         self.audit = Audit(log_path)
         self.lock = RLock()
         self.contract = json.loads((ROOT/'spec/openapi.json').read_text(encoding='utf-8'))
+        self.service.version = self.contract['info']['version']
         self.routes = []
         for path, methods in self.contract['paths'].items():
             pattern = re.sub(r'\{(\w+)\}', lambda m: '(?P<' + m[1] + '>' +
@@ -42,10 +43,14 @@ class Application:
         started = time.perf_counter()
         request_id = uuid4().hex
         method = environ['REQUEST_METHOD']
-        path = environ.get('PATH_INFO','').encode('latin-1').decode('utf-8')
+        path = '/'
         operation_id = 'unmatched'
         with self.lock:
             try:
+                try:
+                    path = environ.get('PATH_INFO','').encode('latin-1').decode('utf-8')
+                except UnicodeError:
+                    raise ApiError(400, 'MALFORMED_REQUEST', 'Path must contain valid UTF-8.')
                 route = next(((p.match(path), o) for m, p, o in self.routes
                               if m == method and p.match(path)), None)
                 if route is None:

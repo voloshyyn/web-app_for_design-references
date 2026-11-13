@@ -68,6 +68,7 @@ def collection_name(body):
 
 class Service:
     def __init__(self, repository):
+        self.version = '1.0.0'
         self.repository = repository
         self.catalog, self.descriptions = repository.load()
 
@@ -103,7 +104,7 @@ class Service:
         cat = self.catalog
         identifier = params.get('id')
         if operation == 'getHealthStatus':
-            return 200, dict(status='healthy', version='1.0.0', service='design-reference-catalog-api',
+            return 200, dict(status='healthy', version=self.version, service='design-reference-catalog-api',
                              timestamp=timestamp(), latency_target_ms=50)
         if operation == 'listReferences':
             try:

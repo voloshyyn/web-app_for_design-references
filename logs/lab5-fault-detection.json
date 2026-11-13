@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-11-14T22:47:52.466979+00:00",
+  "kind": "Current operation-disable fault injection, not historical TDD",
+  "status": "PASS",
+  "cases": [
+    {
+      "requirement": "REQ-F-001",
+      "operation": "createReference",
+      "test": "test_api.py::test_reference_lifecycle",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-002",
+      "operation": "deleteCategory",
+      "test": "test_api.py::test_categories",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-003",
+      "operation": "addReferenceToCollection",
+      "test": "test_api.py::test_collections",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-004",
+      "operation": "updateReference",
+      "test": "test_api.py::test_reference_lifecycle",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-005",
+      "operation": "listReferences",
+      "test": "test_api.py::test_search_filter_and_pagination",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-006",
+      "operation": "listReferences",
+      "test": "test_api.py::test_search_filter_and_pagination",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-007",
+      "operation": "getReferenceById",
+      "test": "test_api.py::test_reference_lifecycle",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-008",
+      "operation": "deleteReference",
+      "test": "test_api.py::test_reference_lifecycle",
+      "detected": true,
+      "exit_code": 1
+    },
+    {
+      "requirement": "REQ-F-009",
+      "operation": "updateCollection",
+      "test": "test_addendum.py::test_rename_preserves_identity_links_and_persistence",
+      "detected": true,
+      "exit_code": 1
+    }
+  ]
+}

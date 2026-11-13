@@ -1,0 +1,41 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+__________________________ test_reference_lifecycle ___________________________
+
+api = <function api.<locals>.call at 0x000001B806611760>
+
+    def test_reference_lifecycle(api):
+        """REQ-F-001/002/004/007/008; AC-F-001.1, SCN-01."""
+>       ref = new_ref(api, tags=[' #Dark ', 'style:clean', 'dark'], notes='Original')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:77: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\test_api.py:72: in new_ref
+    return api('POST', '/references', {'title': 'Dashboard', 'url': 'https://example.org', **fields}, 201)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'POST', path = '/references'
+body = {'title': 'Dashboard', 'url': 'https://example.org', 'tags': [' #Dark ', 'style:clean', 'dark'], 'notes': 'Original'}
+status = 201, template = None, raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Implemented", "status": 501, "detail": "Audit fault injection", "code": "INJECTED_MISSING_BEHAVIOR", "timestamp": "2026-11-14T22:47:42.784201+00:00", "instance": "/api/v1/references"}'
+E           assert 501 == 201
+E            +  where 501 = <HTTPError 501: 'Not Implemented'>.status
+
+tests\test_api.py:51: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_api.py::test_reference_lifecycle - AssertionError: b'{"type...
+1 failed in 0.70s

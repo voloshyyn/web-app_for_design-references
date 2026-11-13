@@ -1,0 +1,47 @@
+F                                                                        [100%]
+================================== FAILURES ===================================
+______________________________ test_collections _______________________________
+
+api = <function api.<locals>.call at 0x0000014A4BB314E0>
+
+    def test_collections(api):
+        """SCN-07: N:M, idempotent link, unlink and cascade cleanup."""
+        ref = new_ref(api)
+        col = api('POST','/collections',{'name':'Board','description':'Moodboard'},201)
+        other = api('POST','/collections',{'name':'Other'},201)
+        assert len(api('GET','/collections')) == 2
+        api('POST','/collections',{'name':' '*2},400)
+        path = '/collections/'+col['id']
+        link = path+'/references/'+ref['id']
+        template = '/collections/{id}/references/{ref_id}'
+        for _ in range(2):
+>           assert api('POST',link,template=template)['reference_ids'] == [ref['id']]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\test_api.py:160: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+method = 'POST'
+path = '/collections/170df5cd2c1c4672a854c5e6ff125b95/references/b969428394f04971b404c765305fb882'
+body = None, status = 200, template = '/collections/{id}/references/{ref_id}'
+raw = None
+
+    def call(method, path, body=None, status=200, template=None, raw=None):
+        data = raw if raw is not None else (json.dumps(body).encode() if body is not None else None)
+        req = Request(f'http://127.0.0.1:{server.server_port}/api/v1{path}',
+                      data=data, method=method, headers={'Content-Type': 'application/json'})
+        try:
+            response = urlopen(req)
+        except HTTPError as error:
+            response = error
+        with response:
+            payload = response.read()
+>           assert response.status == status, payload
+E           AssertionError: b'{"type": "about:blank", "title": "Not Implemented", "status": 501, "detail": "Audit fault injection", "code": "INJEC...0:00", "instance": "/api/v1/collections/170df5cd2c1c4672a854c5e6ff125b95/references/b969428394f04971b404c765305fb882"}'
+E           assert 501 == 200
+E            +  where 501 = <HTTPError 501: 'Not Implemented'>.status
+
+tests\test_api.py:51: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_api.py::test_collections - AssertionError: b'{"type": "abou...
+1 failed in 0.70s
