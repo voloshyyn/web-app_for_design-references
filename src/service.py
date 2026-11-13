@@ -60,6 +60,12 @@ def validate_reference(body, create):
         invalid('tags must be an array of strings.')
 
 
+def collection_name(body):
+    """Shared name constraint for creating and renaming a board."""
+    text_field(body, 'name', 100, required=True)
+    return body['name']
+
+
 class Service:
     def __init__(self, repository):
         self.repository = repository
@@ -136,16 +142,15 @@ class Service:
         if operation == 'listCollections':
             return 200, [self.collection(i, False) for i in cat.collections]
         if operation == 'createCollection':
-            text_field(body, 'name', 100, required=True)
+            name = collection_name(body)
             text_field(body, 'description', nullable=True)
-            col = Collection(id=uuid4().hex, name=body['name'])
+            col = Collection(id=uuid4().hex, name=name)
             cat.collections[col.id] = col
             self.descriptions[col.id] = body.get('description')
             return 201, self.collection(col.id, False)
         if operation == 'updateCollection':
             col = self.get(cat.collections, identifier)
-            text_field(body, 'name', 100, required=True)
-            col.name = body['name']
+            col.name = collection_name(body)
             return 200, self.collection(identifier)
         if operation in {'getCollectionById','deleteCollection','addReferenceToCollection',
                          'removeReferenceFromCollection'}:

@@ -1,0 +1,15 @@
+127.0.0.1 - - [14/Nov/2026 22:24:37] "GET /api/v1/health HTTP/1.1" 200 158
+127.0.0.1 - - [14/Nov/2026 22:24:37] "POST /api/v1/references HTTP/1.1" 201 248
+127.0.0.1 - - [14/Nov/2026 22:24:37] "GET /api/v1/references?tags=mobile,dark HTTP/1.1" 200 299
+127.0.0.1 - - [14/Nov/2026 22:24:37] "POST /api/v1/collections HTTP/1.1" 201 106
+127.0.0.1 - - [14/Nov/2026 22:24:37] "POST /api/v1/collections/20c08312c340464490fdfc72e3df96ed/references/4dfa16cb0a744eada9e467b353e40624 HTTP/1.1" 200 139
+127.0.0.1 - - [14/Nov/2026 22:24:37] "PUT /api/v1/collections/20c08312c340464490fdfc72e3df96ed HTTP/1.1" 200 142
+127.0.0.1 - - [14/Nov/2026 22:24:37] "GET /api/v1/collections/20c08312c340464490fdfc72e3df96ed HTTP/1.1" 200 142
+GET /health 200 {"status": "healthy", "version": "1.0.0", "service": "design-reference-catalog-api", "timestamp": "2026-11-14T20:24:37.090950+00:00", "latency_target_ms": 50}
+POST /references 201 {"id": "4dfa16cb0a744eada9e467b353e40624", "title": "Lab 5 dashboard", "url": "https://example.org", "image_url": null, "category": "General", "created_at": "2026-11-14T20:24:37.098103+00:00", "notes": "", "tags": ["dark", "mobile", "style:clean"]}
+GET /references?tags=mobile,dark 200 {"items": [{"id": "4dfa16cb0a744eada9e467b353e40624", "title": "Lab 5 dashboard", "url": "https://example.org", "image_url": null, "category": "General", "created_at": "2026-11-14T20:24:37.098103+00:00", "notes": "", "tags": ["dark", "mobile", "style:clean"]}], "total": 1, "limit": 50, "offset": 0}
+POST /collections 201 {"id": "20c08312c340464490fdfc72e3df96ed", "name": "Moodboard", "description": null, "reference_count": 0}
+POST /collections/20c08312c340464490fdfc72e3df96ed/references/4dfa16cb0a744eada9e467b353e40624 200 {"id": "20c08312c340464490fdfc72e3df96ed", "name": "Moodboard", "description": null, "reference_ids": ["4dfa16cb0a744eada9e467b353e40624"]}
+PUT /collections/20c08312c340464490fdfc72e3df96ed 200 {"id": "20c08312c340464490fdfc72e3df96ed", "name": "Client pitch", "description": null, "reference_ids": ["4dfa16cb0a744eada9e467b353e40624"]}
+GET /collections/20c08312c340464490fdfc72e3df96ed 200 {"id": "20c08312c340464490fdfc72e3df96ed", "name": "Client pitch", "description": null, "reference_ids": ["4dfa16cb0a744eada9e467b353e40624"]}
+Demo complete. Temporary data only; no human validation implied.

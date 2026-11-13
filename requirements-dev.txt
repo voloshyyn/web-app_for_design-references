@@ -1,0 +1,5 @@
+pytest==9.2.0
+jsonschema==4.26.0
+PyYAML==6.0.3
+coverage==7.17.3
+openapi-spec-validator==0.9.0
