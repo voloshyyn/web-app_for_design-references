@@ -1,0 +1,290 @@
+EEEEEEEEEEEEEEEEEEEEEEEEEE                                               [100%]
+=================================== ERRORS ====================================
+_________________ ERROR at setup of test_reference_lifecycle __________________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_reference_lifecycle0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body0-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body0_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body1-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body1_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body2-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body2_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body3-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body3_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body4-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body4_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body5-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body5_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body6-422] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body6_4220')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body7-422] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body7_4220')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body8-422] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body8_4220')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_input_rejection[body9-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body9_4000')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_input_rejection[body10-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body10_400')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_input_rejection[body11-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body11_400')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_input_rejection[body12-422] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body12_420')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_input_rejection[body13-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body13_400')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_input_rejection[body14-400] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_input_rejection_body14_400')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+___________ ERROR at setup of test_malformed_json_and_atomic_update ___________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_malformed_json_and_atomic0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_search_filter_and_pagination _____________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_search_filter_and_paginat0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_______________ ERROR at setup of test_bad_pagination[limit=0] ________________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_bad_pagination_limit_0_0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_bad_pagination[limit=101] _______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_bad_pagination_limit_101_0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_______________ ERROR at setup of test_bad_pagination[limit=x] ________________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_bad_pagination_limit_x_0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_bad_pagination[offset=-1] _______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_bad_pagination_offset__1_0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________ ERROR at setup of test_bad_pagination[offset=1.5] ______________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_bad_pagination_offset_1_50')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+______________________ ERROR at setup of test_categories ______________________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_categories0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________________ ERROR at setup of test_collections ______________________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_collections0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+_____________ ERROR at setup of test_health_persistence_and_audit _____________
+
+tmp_path = WindowsPath('C:/Users/Андрей/AppData/Local/Temp/pytest-of-Андрей/pytest-0/test_health_persistence_and_au0')
+
+    @pytest.fixture
+    def api(tmp_path):
+>       from src.api import create_app
+E       ModuleNotFoundError: No module named 'src.api'
+
+tests\test_api.py:35: ModuleNotFoundError
+=========================== short test summary info ===========================
+ERROR tests/test_api.py::test_reference_lifecycle - ModuleNotFoundError: No m...
+ERROR tests/test_api.py::test_input_rejection[body0-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body1-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body2-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body3-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body4-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body5-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body6-422] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body7-422] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body8-422] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body9-400] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_input_rejection[body10-400] - ModuleNotFoundErr...
+ERROR tests/test_api.py::test_input_rejection[body11-400] - ModuleNotFoundErr...
+ERROR tests/test_api.py::test_input_rejection[body12-422] - ModuleNotFoundErr...
+ERROR tests/test_api.py::test_input_rejection[body13-400] - ModuleNotFoundErr...
+ERROR tests/test_api.py::test_input_rejection[body14-400] - ModuleNotFoundErr...
+ERROR tests/test_api.py::test_malformed_json_and_atomic_update - ModuleNotFou...
+ERROR tests/test_api.py::test_search_filter_and_pagination - ModuleNotFoundEr...
+ERROR tests/test_api.py::test_bad_pagination[limit=0] - ModuleNotFoundError: ...
+ERROR tests/test_api.py::test_bad_pagination[limit=101] - ModuleNotFoundError...
+ERROR tests/test_api.py::test_bad_pagination[limit=x] - ModuleNotFoundError: ...
+ERROR tests/test_api.py::test_bad_pagination[offset=-1] - ModuleNotFoundError...
+ERROR tests/test_api.py::test_bad_pagination[offset=1.5] - ModuleNotFoundErro...
+ERROR tests/test_api.py::test_categories - ModuleNotFoundError: No module nam...
+ERROR tests/test_api.py::test_collections - ModuleNotFoundError: No module na...
+ERROR tests/test_api.py::test_health_persistence_and_audit - ModuleNotFoundEr...
+26 errors in 0.53s

@@ -2,3 +2,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.docx
+.lab5-deps/
+.venv/
+.coverage
+tmp/
+data/
+logs/runtime/
+output/
